@@ -8,14 +8,33 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject var authViewModel : AuthenticationViewModel = .init(loginUseCase: Injection.shared.provideLoginUseCase(), registerUseCase: Injection.shared.provideRegisterUseCase())
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        if (!authViewModel.isLoggedIn) {
+            AuthenticationView()
+                .environment(authViewModel)
+        } else {
+            NavigationStack {
+                VStack {
+                    ScrollView {}
+                }
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .principal) {
+                        VStack {
+                            Image("USLogoWhite")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 56)
+                        }
+                    }
+                }
+                .toolbarBackground(.visible, for: .navigationBar)
+                .toolbarBackground(Color("Surface"), for: .automatic)
+                .background(Color("Background"))
+            }
         }
-        .padding()
     }
 }
 
