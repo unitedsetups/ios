@@ -15,25 +15,7 @@ struct ContentView: View {
             AuthenticationView()
                 .environment(authViewModel)
         } else {
-            NavigationStack {
-                VStack {
-                    ScrollView {}
-                }
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .principal) {
-                        VStack {
-                            Image("USLogoWhite")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(height: 56)
-                        }
-                    }
-                }
-                .toolbarBackground(.visible, for: .navigationBar)
-                .toolbarBackground(Color("Surface"), for: .automatic)
-                .background(Color("Background"))
-            }
+            MainView()
         }
     }
 }
