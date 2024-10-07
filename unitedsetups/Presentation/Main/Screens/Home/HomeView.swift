@@ -9,11 +9,23 @@ import SwiftUI
 
 struct HomeView: View {
     var body: some View {
-        ScrollView {
-            LazyVStack {
-                Text("Home")
+        ZStack(alignment: .bottomTrailing) {
+            ScrollView {
+                LazyVStack {
+                    Text("Home")
+                }
+                .padding([.top, .horizontal], 16)
             }
-            .padding([.top, .horizontal], 16)
+            .frame(maxWidth: .infinity)
+            NavigationLink(destination: PostView()) {
+                Image("EditNote")
+                    .renderingMode(.template)
+                    .padding()
+                    .background(.accent)
+                    .foregroundStyle(.black)
+                    .clipShape(Circle())
+                    .padding()
+            }
         }
         .frame(maxWidth: .infinity)
     }

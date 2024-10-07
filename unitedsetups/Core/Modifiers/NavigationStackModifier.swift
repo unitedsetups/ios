@@ -17,7 +17,7 @@ struct NavigationStackModifier: ViewModifier {
                         Image("USLogoWhite")
                             .resizable()
                             .scaledToFit()
-                            .frame(height: 56)
+                            .frame(height: 48)
                     }
                 }
             }
