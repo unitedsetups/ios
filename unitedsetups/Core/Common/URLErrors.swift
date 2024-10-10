@@ -12,4 +12,5 @@ enum URLErrors: Error {
     case FailedToEncodeRequest
     case InvalidResponse
     case ParsingError
+    case Unauthorized
 }

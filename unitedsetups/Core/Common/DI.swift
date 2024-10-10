@@ -21,4 +21,8 @@ struct Injection {
     func provideRegisterUseCase() -> RegisterUseImpl {
         return RegisterUseImpl(repo: AuthRepository.sharedInstance(AuthDataSource.shared))
     }
+    
+    func provideGetAllPostsUseCase() -> GetAllPostsImpl {
+        return GetAllPostsImpl(repo: PostRepository.sharedInstance(PostDataSource.shared))
+    }
 }
