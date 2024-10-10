@@ -24,12 +24,16 @@ extension PostDataSource : PostDataSourceProtocol {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         let (data, response) = try await URLSession.shared.data(for: request)
         
-        guard let response = response as? HTTPURLResponse, response.statusCode == 401 else {
+        guard let response = response as? HTTPURLResponse, response.statusCode < 402 else {
+            throw URLErrors.InvalidResponse
+        }
+        
+        if (response.statusCode == 401) {
             var token = tokenManager.saveAccessToken(access_token: "")
             throw URLErrors.Unauthorized
         }
         
-        if (response.statusCode < 400) {
+        if (response.statusCode >= 400) {
             throw URLErrors.InvalidResponse
         }
         
