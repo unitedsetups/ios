@@ -9,10 +9,10 @@ import SwiftUI
 import PhotosUI
 
 struct NewPostModifier: ViewModifier {
-    @State var viewModel: PostViewModel
+    @State var viewModel: NewPostViewModel
     let maxPhotosToSelect = 5
     
-    init (viewModel: PostViewModel) {
+    init (viewModel: NewPostViewModel) {
         self.viewModel = viewModel
     }
     
@@ -101,7 +101,7 @@ struct NewPostModifier: ViewModifier {
 }
 
 extension View {
-    func NewPostStyle(viewModel: PostViewModel) -> some View {
+    func NewPostStyle(viewModel: NewPostViewModel) -> some View {
         modifier(NewPostModifier(viewModel: viewModel))
     }
 }

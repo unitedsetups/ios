@@ -17,7 +17,9 @@ struct PostDataSource {
 
 extension PostDataSource : PostDataSourceProtocol {
     func getAllPosts(getAllPostsRequest: GetAllPostsRequest) async throws -> [PostResponse] {
-        guard let url = URL(string: Constants.getAllPostsEndpoint(getAllPostsRequest)) else { throw URLErrors.InvalidUrl }
+        guard let url = URL(string: Constants.getAllPostsEndpoint(getAllPostsRequest)) else {
+            throw URLErrors.InvalidUrl
+        }
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("Bearer \(tokenManager.getAccessToken())", forHTTPHeaderField: "Authorization")
@@ -29,7 +31,7 @@ extension PostDataSource : PostDataSourceProtocol {
         }
         
         if (response.statusCode == 401) {
-            var token = tokenManager.saveAccessToken(access_token: "")
+            _ = tokenManager.saveAccessToken(access_token: "")
             throw URLErrors.Unauthorized
         }
         

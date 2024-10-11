@@ -34,6 +34,7 @@ import Foundation
             case .success(let auth):
                 self.auth = auth
                 self.isLoggedIn = tokenManager.saveAccessToken(access_token: auth.token)
+                _ = tokenManager.saveUserId(user_id: auth.id.uuidString)
                 self.isLoading = false
             case .failure(let failure):
                 self.isLoading = false

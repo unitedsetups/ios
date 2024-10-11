@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct PostView: View {
-    @StateObject var viewModel = PostViewModel()
+struct NewPostView: View {
+    @StateObject var viewModel = NewPostViewModel()
     @FocusState private var focussed: Bool
     
     var body: some View {
@@ -79,6 +79,9 @@ struct PostView: View {
             
         }
         .NewPostStyle(viewModel: viewModel)
+        .onAppear() {
+            focussed = true
+        }
         .onChange(of: viewModel.selectedPhotos) { _, _ in
             viewModel.convertDataToImage()
         }

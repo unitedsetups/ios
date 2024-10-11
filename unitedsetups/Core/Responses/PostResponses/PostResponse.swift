@@ -12,8 +12,8 @@ struct PostResponse : Decodable {
     let text: String
     let createdDateTime: String
     let updatedDateTime: String
-    let upvotes: Double
-    let clicks: Double
+    let upvotes: Int32
+    let clicks: Int32
     let deviceId: String?
     let postMediaUrls: [PostMediaUrlResponse]
     let postedById: String
@@ -51,14 +51,11 @@ enum PostMapper {
     }
     
     static func mapPostResponseToDomain(input response: PostResponse) -> Post {
-        var dateFormatter = DateFormatter()
-        dateFormatter.locale = .current
-        
         return Post(
             id: UUID.init(uuidString: response.id)!,
             text: response.text,
-            createdDateTime: dateFormatter.date(from: response.createdDateTime) ?? Date(),
-            updatedDateTime: dateFormatter.date(from: response.updatedDateTime) ?? Date(),
+            createdDateTime: Formatters.getDateFromString(response.createdDateTime),
+            updatedDateTime: Formatters.getDateFromString(response.updatedDateTime),
             upvotes: response.upvotes,
             clicks: response.clicks,
             deviceId: response.deviceId != nil ? UUID.init(uuidString: response.deviceId!) : nil,

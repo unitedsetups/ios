@@ -85,14 +85,10 @@ struct AuthenticationView: View {
             .background(Color("Surface"))
             .cornerRadius(16)
             .padding()
-            .shadow(radius: 10)
+            .shadow(radius: 16)
         }
         .edgesIgnoringSafeArea(.all)
         .background(Color("Background"))
         .foregroundStyle(.white)
     }
-}
-
-#Preview {
-    AuthenticationView()
 }

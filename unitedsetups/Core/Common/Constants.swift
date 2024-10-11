@@ -8,7 +8,9 @@
 import Foundation
 
 struct Constants {
-    private static let apiUrl: String = "https://unitedsetups.paraskcd.com/api"
+    public static let pageSize: Int = 25
+    public static let baseUrl: String = "https://unitedsetups.paraskcd.com"
+    private static let apiUrl: String = "\(baseUrl)/api"
     static let loginEndpoint: () -> String = { "\(apiUrl)/auth/login" }
     static let registerEndpoint: () -> String = { "\(apiUrl)/auth/register" }
     static let getAllPostsEndpoint: (GetAllPostsRequest) -> String = {
@@ -20,6 +22,6 @@ struct Constants {
             urlParams += "&filter=\(getAllPostsRequest.filter!)"
         }
         
-        return "\(apiUrl)/auth/posts?\(urlParams)"
+        return "\(apiUrl)/posts?\(urlParams)"
     }
 }

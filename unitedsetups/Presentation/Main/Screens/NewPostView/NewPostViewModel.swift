@@ -8,7 +8,7 @@
 import SwiftUI
 import PhotosUI
 
-class PostViewModel: ObservableObject {
+class NewPostViewModel: ObservableObject {
     @Published var images = [UIImage]()
     @Published var selectedPhotos = [PhotosPickerItem]()
     @Published var postText: String = ""

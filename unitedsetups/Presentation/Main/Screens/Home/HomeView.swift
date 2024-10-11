@@ -8,23 +8,44 @@
 import SwiftUI
 
 struct HomeView: View {
+    @StateObject var homeViewModel : HomeViewModel = .init(getAllPostsUseCase: Injection.shared.provideGetAllPostsUseCase())
+    
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             ScrollView {
                 LazyVStack {
-                    Text("Home")
+                    if (homeViewModel.isLoading) {
+                        VStack {
+                            SkeletonLoadingPost()
+                            SkeletonLoadingPost()
+                            SkeletonLoadingPost()
+                        }
+                        .blinking(duration: 0.75)
+                    }
+                    ForEach(homeViewModel.posts, id: \.id) {
+                        post in
+                        PostItem(post: post, isLoggedInUser: UUID(uuidString: homeViewModel.loggedInUserId!) == post.postedBy.id)
+                    }
                 }
-                .padding([.top, .horizontal], 16)
+                .padding(8)
             }
             .frame(maxWidth: .infinity)
-            NavigationLink(destination: PostView()) {
+            NavigationLink(destination: NewPostView()) {
                 Image("EditNote")
                     .renderingMode(.template)
                     .padding()
                     .background(.accent)
                     .foregroundStyle(.black)
                     .clipShape(Circle())
+                    .shadow(radius: 16)
                     .padding()
+            }
+        }
+        .task {
+            do {
+                try await homeViewModel.fetchPosts()
+            } catch {
+                print(homeViewModel.errorMessage ?? "Couldn't fetch posts")
             }
         }
         .frame(maxWidth: .infinity)

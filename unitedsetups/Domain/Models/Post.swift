@@ -12,8 +12,8 @@ struct Post {
     let text: String
     let createdDateTime: Date
     let updatedDateTime: Date
-    let upvotes: Double
-    let clicks: Double
+    let upvotes: Int32
+    let clicks: Int32
     let deviceId: UUID?
     let postMediaUrls: [PostMediaUrl]
     let postedBy: PostedBy
