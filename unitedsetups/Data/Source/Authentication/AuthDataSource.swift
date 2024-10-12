@@ -8,6 +8,9 @@
 import Foundation
 
 struct AuthDataSource {
+    let tokenManager: TokenManager = Injection.shared.provideTokenManager()
+    let httpManager: HttpManager = Injection.shared.provideHttpManager()
+    
     private init() {}
     
     static let shared: AuthDataSource = AuthDataSource()
@@ -15,17 +18,15 @@ struct AuthDataSource {
 
 extension AuthDataSource : AuthDataSourceProtocol {
     func login(loginRequest: LoginRequest) async throws -> AuthResponse {
-        guard let url = URL(string: Constants.loginEndpoint()) else { throw URLErrors.InvalidUrl }
         guard let jsonData = try? JSONEncoder().encode(loginRequest) else { throw URLErrors.FailedToEncodeRequest }
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = jsonData
-        request.setValue(
-            "application/json",
-            forHTTPHeaderField: "Content-Type"
+        
+        let (data, response) = try await httpManager.POST(
+            url: URL(string: Constants.loginEndpoint()),
+            accessToken: tokenManager.getAccessToken(),
+            revokeAccessToken: { _ = tokenManager.saveAccessToken(access_token: "") },
+            body: jsonData
         )
-        let (data, response) = try await URLSession.shared.data(for: request)
-        guard let response = response as? HTTPURLResponse, response.statusCode < 400 else { throw URLErrors.InvalidResponse }
+        
         do {
             return try JSONDecoder().decode(AuthResponse.self, from: data)
         } catch {
@@ -34,17 +35,15 @@ extension AuthDataSource : AuthDataSourceProtocol {
     }
     
     func register(registerRequest: RegisterRequest) async throws -> AuthResponse {
-        guard let url = URL(string: Constants.loginEndpoint()) else { throw URLErrors.InvalidUrl }
         guard let jsonData = try? JSONEncoder().encode(registerRequest) else { throw URLErrors.FailedToEncodeRequest }
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = jsonData
-        request.setValue(
-            "application/json",
-            forHTTPHeaderField: "Content-Type"
+        
+        let (data, response) = try await httpManager.POST(
+            url: URL(string: Constants.registerEndpoint()),
+            accessToken: tokenManager.getAccessToken(),
+            revokeAccessToken: { _ = tokenManager.saveAccessToken(access_token: "") },
+            body: jsonData
         )
-        let (data, response) = try await URLSession.shared.data(for: request)
-        guard let response = response as? HTTPURLResponse, response.statusCode < 400 else { throw URLErrors.InvalidResponse }
+
         do {
             return try JSONDecoder().decode(AuthResponse.self, from: data)
         } catch {

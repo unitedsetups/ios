@@ -14,6 +14,10 @@ struct Injection {
         return TokenManager.shared
     }
     
+    func provideHttpManager() -> HttpManager {
+        return HttpManager.shared
+    }
+    
     func provideUploadDataSource() -> UploadDataSource {
         return UploadDataSource.shared
     }
