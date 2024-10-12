@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject var homeViewModel : HomeViewModel = .init(getAllPostsUseCase: Injection.shared.provideGetAllPostsUseCase())
+    @StateObject var newPostViewModel : NewPostViewModel = NewPostViewModel()
     
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
@@ -30,7 +31,19 @@ struct HomeView: View {
                 .padding(8)
             }
             .frame(maxWidth: .infinity)
-            NavigationLink(destination: NewPostView()) {
+            .refreshable {
+                do {
+                    try await homeViewModel.fetchPosts()
+                } catch {
+                    print(error)
+                }
+            }
+            
+            NavigationLink(
+                destination:
+                    NewPostView()
+                    .environmentObject(newPostViewModel)
+            ) {
                 Image("EditNote")
                     .renderingMode(.template)
                     .padding()

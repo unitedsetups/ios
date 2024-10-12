@@ -19,6 +19,11 @@ struct PostHeader: View {
             HStack {
                 AsyncImage(url: asyncProfilePictureUrl) {
                     result in
+                    if result.image == nil {
+                        Color("Background")
+                            .frame(width: 32, height: 32)
+                            .blinking(duration: 0.75)
+                    }
                     result.image?
                         .resizable()
                         .scaledToFill()

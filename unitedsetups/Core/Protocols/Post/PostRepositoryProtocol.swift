@@ -7,4 +7,5 @@
 
 protocol PostRepositoryProtocol {
     func getAllPosts(request: GetAllPostsRequest) async throws -> [Post]
+    func createNewPost(request: CreatePostRequest) async throws -> Post
 }

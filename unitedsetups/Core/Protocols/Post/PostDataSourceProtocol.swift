@@ -9,4 +9,5 @@ import Foundation
 
 protocol PostDataSourceProtocol {
     func getAllPosts(getAllPostsRequest: GetAllPostsRequest) async throws -> [PostResponse]
+    func createNewPost(createPostRequest: CreatePostRequest) async throws -> PostResponse
 }

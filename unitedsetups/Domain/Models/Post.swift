@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Post {
+struct Post : Equatable {
     let id: UUID
     let text: String
     let createdDateTime: Date
@@ -19,13 +19,13 @@ struct Post {
     let postedBy: PostedBy
 }
 
-struct PostMediaUrl {
+struct PostMediaUrl : Equatable {
     let id: UUID
     let path: String
     let thumbnailPath: String
 }
 
-struct PostedBy {
+struct PostedBy : Equatable {
     let id: UUID
     let name: String
     let username: String

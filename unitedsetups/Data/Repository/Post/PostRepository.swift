@@ -22,6 +22,15 @@ struct PostRepository {
 }
 
 extension PostRepository : PostRepositoryProtocol {
+    func createNewPost(request: CreatePostRequest) async throws -> Post {
+        do {
+            let data = try await dataSource.createNewPost(createPostRequest: request)
+            return PostMapper.mapPostResponseToDomain(input: data)
+        } catch {
+            throw error
+        }
+    }
+    
     func getAllPosts(request: GetAllPostsRequest) async throws -> [Post] {
         do {
             let data = try await dataSource.getAllPosts(getAllPostsRequest: request)

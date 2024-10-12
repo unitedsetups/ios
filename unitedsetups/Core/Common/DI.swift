@@ -14,15 +14,23 @@ struct Injection {
         return TokenManager.shared
     }
     
-    func provideLoginUseCase() -> LoginUseImpl {
+    func provideUploadDataSource() -> UploadDataSource {
+        return UploadDataSource.shared
+    }
+    
+    func provideLoginUseCase() -> LoginUseCase {
         return LoginUseImpl(repo: AuthRepository.sharedInstance(AuthDataSource.shared))
     }
     
-    func provideRegisterUseCase() -> RegisterUseImpl {
+    func provideRegisterUseCase() -> RegisterUseCase {
         return RegisterUseImpl(repo: AuthRepository.sharedInstance(AuthDataSource.shared))
     }
     
-    func provideGetAllPostsUseCase() -> GetAllPostsImpl {
+    func provideGetAllPostsUseCase() -> GetAllPostsUseCase {
         return GetAllPostsImpl(repo: PostRepository.sharedInstance(PostDataSource.shared))
+    }
+    
+    func provideCreateNewPostUseCase() -> CreateNewPostUseCase {
+        return CreateNewPostImpl(repo: PostRepository.sharedInstance(PostDataSource.shared))
     }
 }
