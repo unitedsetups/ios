@@ -29,7 +29,7 @@ struct PostMediaUrlResponse : Decodable {
 struct PostedByResponse : Decodable {
     let name: String
     let username: String
-    let profileImageThumbnailUrl: String
+    let profileImageThumbnailUrl: String?
 }
 
 enum PostMapper {

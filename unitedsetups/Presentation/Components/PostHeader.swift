@@ -17,20 +17,32 @@ struct PostHeader: View {
     var body: some View {
         VStack {
             HStack {
-                AsyncImage(url: asyncProfilePictureUrl) {
-                    result in
-                    if result.image == nil {
-                        Color("Background")
+                if (asyncProfilePictureUrl == nil) {
+                    ZStack {
+                        Image("Person")
                             .frame(width: 32, height: 32)
-                            .blinking(duration: 0.75)
                     }
-                    result.image?
-                        .resizable()
-                        .scaledToFill()
+                    .frame(width: 32, height: 32)
+                    .background(Color("Background"))
+                    .clipShape(Circle())
+                    .shadow(radius: 16)
+                } else {
+                    AsyncImage(url: asyncProfilePictureUrl) {
+                        result in
+                        if result.image == nil {
+                            Color("Background")
+                                .frame(width: 32, height: 32)
+                                .blinking(duration: 0.75)
+                        }
+                        result.image?
+                            .resizable()
+                            .scaledToFill()
+                    }
+                    .frame(width: 32, height: 32)
+                    .clipShape(Circle())
+                    .shadow(radius: 16)
                 }
-                .frame(width: 32, height: 32)
-                .clipShape(Circle())
-                .shadow(radius: 16)
+                
                 Text(postedByName)
                     .font(.caption)
                 Text(" @\(postedByUsername)")

@@ -29,5 +29,5 @@ struct PostedBy : Equatable {
     let id: UUID
     let name: String
     let username: String
-    let profileImageThumbnailUrl: String
+    let profileImageThumbnailUrl: String?
 }
