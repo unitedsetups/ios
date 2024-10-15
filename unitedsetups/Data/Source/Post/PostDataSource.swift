@@ -22,10 +22,10 @@ extension PostDataSource : PostDataSourceProtocol {
             throw URLErrors.FailedToEncodeRequest
         }
         
-        let (data, response) = try await httpManager.POST(
+        let (data, _) = try await httpManager.POST(
             url: URL(string: Constants.postsEndpoint()),
-            accessToken: tokenManager.getAccessToken(),
-            revokeAccessToken: { _ = tokenManager.saveAccessToken(access_token: "") },
+            accessToken: getAccessToken(),
+            revokeAccessToken: { revokeAccessToken() },
             body: jsonData
         )
         
@@ -37,10 +37,10 @@ extension PostDataSource : PostDataSourceProtocol {
     }
     
     func getAllPosts(getAllPostsRequest: GetAllPostsRequest) async throws -> [PostResponse] {
-        let (data, response) = try await httpManager.GET(
+        let (data, _) = try await httpManager.GET(
             url: URL(string: Constants.getAllPostsEndpoint(getAllPostsRequest)),
-            accessToken: tokenManager.getAccessToken(),
-            revokeAccessToken: { _ = tokenManager.saveAccessToken(access_token: "") }
+            accessToken: getAccessToken(),
+            revokeAccessToken: { revokeAccessToken() }
         )
         
         do {
@@ -48,5 +48,27 @@ extension PostDataSource : PostDataSourceProtocol {
         } catch {
             throw URLErrors.ParsingError
         }
+    }
+    
+    func getPostById(id: String) async throws -> PostResponse {
+        let (data, _) = try await httpManager.GET(
+            url: URL(string: Constants.getPostByIdEndpoint(id)),
+            accessToken: getAccessToken(),
+            revokeAccessToken: { revokeAccessToken() }
+        )
+        
+        do {
+            return try JSONDecoder().decode(PostResponse.self, from: data)
+        } catch {
+            throw URLErrors.ParsingError
+        }
+    }
+    
+    private func revokeAccessToken() {
+        _ = tokenManager.saveAccessToken(access_token: "")
+    }
+    
+    private func getAccessToken() -> String {
+        return tokenManager.getAccessToken()
     }
 }

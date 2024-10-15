@@ -19,7 +19,7 @@ struct Post : Equatable {
     let postedBy: PostedBy
 }
 
-struct PostMediaUrl : Equatable {
+struct PostMediaUrl : Equatable, Hashable {
     let id: UUID
     let path: String
     let thumbnailPath: String

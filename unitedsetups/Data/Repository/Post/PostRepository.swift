@@ -41,4 +41,13 @@ extension PostRepository : PostRepositoryProtocol {
             throw error;
         }
     }
+    
+    func getPostById(id: String) async throws -> Post {
+        do {
+            let data = try await dataSource.getPostById(id: id)
+            return PostMapper.mapPostResponseToDomain(input: data)
+        } catch {
+            throw error
+        }
+    }
 }

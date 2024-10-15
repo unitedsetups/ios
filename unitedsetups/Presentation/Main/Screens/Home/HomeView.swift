@@ -48,8 +48,8 @@ struct HomeView: View {
                     .renderingMode(.template)
                     .padding()
                     .background(.accent)
-                    .foregroundStyle(.black)
-                    .clipShape(Circle())
+                    .foregroundStyle(Color("Background"))
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
                     .shadow(radius: 16)
                     .padding()
             }

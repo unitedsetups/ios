@@ -26,4 +26,5 @@ struct Constants {
         
         return "\(postsEndpoint())?\(urlParams)"
     }
+    public static let getPostByIdEndpoint: (String) -> String = { id in "\(postsEndpoint())/\(id)" }
 }
