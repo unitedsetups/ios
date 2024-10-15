@@ -11,20 +11,23 @@ struct Constants {
     public static let pageSize: Int = 25
     public static let baseUrl: String = "https://unitedsetups.paraskcd.com"
     public static let apiUrl: String = "\(baseUrl)/api"
+    public static let postsEndpoint: String = "\(apiUrl)/posts"
+    public static let usersEndpoint: String = "\(apiUrl)/users"
     public static let loginEndpoint: () -> String = { "\(apiUrl)/auth/login" }
     public static let registerEndpoint: () -> String = { "\(apiUrl)/auth/register" }
-    public static let uploadFilesEndpoint: (UploadRequest) -> String = { uploadRequest in "\(apiUrl)/upload/\(uploadRequest.apiPath)" }
-    public static let postsEndpoint: () -> String = { "\(apiUrl)/posts" }
-    public static let getAllPostsEndpoint: (GetAllPostsRequest) -> String = {
-        getAllPostsRequest in
-        
+    public static let uploadFilesEndpoint: (UploadRequest) -> String = { uploadRequest in "\(apiUrl)/upload/\(uploadRequest.apiPath)"
+    }
+    public static let getAllPostsEndpoint: (GetAllPostsRequest) -> String = { getAllPostsRequest in
         var urlParams: String = "page=\(getAllPostsRequest.page)&pageSize=\(getAllPostsRequest.pageSize)"
-        
         if (getAllPostsRequest.filter != nil) {
             urlParams += "&filter=\(getAllPostsRequest.filter!)"
         }
-        
-        return "\(postsEndpoint())?\(urlParams)"
+        if (getAllPostsRequest.userId != nil) {
+            urlParams += "&postedById=\(getAllPostsRequest.userId!)"
+        }
+        return "\(postsEndpoint)?\(urlParams)"
     }
-    public static let getPostByIdEndpoint: (String) -> String = { id in "\(postsEndpoint())/\(id)" }
+    public static let getPostByIdEndpoint: (String) -> String = { id in "\(postsEndpoint)/\(id)" }
+    public static let getUserByIdEndpoint: (String) -> String = { id in "\(usersEndpoint)/\(id)"}
+    public static let getMyProfileEndpoint: String = "\(usersEndpoint)/me"
 }

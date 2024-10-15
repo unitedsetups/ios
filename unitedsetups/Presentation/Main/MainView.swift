@@ -40,7 +40,7 @@ struct MainView: View {
                         Text("Notifications")
                     }
                     .tag(2)
-                UserView()
+                UserView(userId: nil)
                     .TabStyle()
                     .tabItem {
                         Image("Person")
@@ -48,7 +48,7 @@ struct MainView: View {
                             .tint(selectedTab == 3 ? Color.accentColor : Color.white)
                         Text("Profile")
                     }
-                    .tag(2)
+                    .tag(3)
             }
             .NavigationStackStyle()
         }

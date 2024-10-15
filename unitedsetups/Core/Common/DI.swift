@@ -37,4 +37,16 @@ struct Injection {
     func provideCreateNewPostUseCase() -> CreateNewPostUseCase {
         return CreateNewPostImpl(repo: PostRepository.sharedInstance(PostDataSource.shared))
     }
+    
+    func provideGetPostByIdUseCase() -> GetPostByIdUseCase {
+        return GetPostByIdImpl(repo: PostRepository.sharedInstance(PostDataSource.shared))
+    }
+    
+    func provideGetUserByIdUseCase() -> GetUserByIdUseCase {
+        return GetUserByIdImpl(repo: UserRepository.sharedInstance(UserDataSource.shared))
+    }
+    
+    func provideGetMyProfileUseCase() -> GetMyProfileUseCase {
+        return GetMyProfileImpl(repo: UserRepository.sharedInstance(UserDataSource.shared))
+    }
 }

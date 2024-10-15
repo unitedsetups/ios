@@ -9,4 +9,5 @@ struct GetAllPostsRequest: Encodable {
     let filter: String?
     let page: Int
     let pageSize: Int
+    let userId: String?
 }

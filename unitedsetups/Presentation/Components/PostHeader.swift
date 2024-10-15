@@ -13,41 +13,47 @@ struct PostHeader: View {
     var asyncProfilePictureUrl: URL?
     var isLoggedInUser: Bool
     var text: String
+    var userId: String
     
     var body: some View {
         VStack {
             HStack {
-                if (asyncProfilePictureUrl == nil) {
-                    ZStack {
-                        Image("Person")
-                            .frame(width: 32, height: 32)
-                    }
-                    .frame(width: 32, height: 32)
-                    .background(Color("Background"))
-                    .clipShape(Circle())
-                    .shadow(radius: 16)
-                } else {
-                    AsyncImage(url: asyncProfilePictureUrl) {
-                        result in
-                        if result.image == nil {
-                            Color("Background")
+                NavigationLink {
+                    UserView(userId: userId)
+                } label: {
+                    if (asyncProfilePictureUrl == nil) {
+                        ZStack {
+                            Image("Person")
                                 .frame(width: 32, height: 32)
-                                .blinking(duration: 0.75)
                         }
-                        result.image?
-                            .resizable()
-                            .scaledToFill()
+                        .frame(width: 32, height: 32)
+                        .background(Color("Background"))
+                        .clipShape(Circle())
+                        .shadow(radius: 16)
+                    } else {
+                        AsyncImage(url: asyncProfilePictureUrl) {
+                            result in
+                            if result.image == nil {
+                                Color("Background")
+                                    .frame(width: 32, height: 32)
+                                    .blinking(duration: 0.75)
+                            }
+                            result.image?
+                                .resizable()
+                                .scaledToFill()
+                        }
+                        .frame(width: 32, height: 32)
+                        .clipShape(Circle())
+                        .shadow(radius: 16)
                     }
-                    .frame(width: 32, height: 32)
-                    .clipShape(Circle())
-                    .shadow(radius: 16)
+                    
+                    Text(postedByName)
+                        .font(.caption)
+                    Text(" @\(postedByUsername)")
+                        .font(.caption)
+                        .foregroundStyle(.opacity(0.5))
                 }
                 
-                Text(postedByName)
-                    .font(.caption)
-                Text(" @\(postedByUsername)")
-                    .font(.caption)
-                    .foregroundStyle(.opacity(0.5))
                 Spacer()
                 if (isLoggedInUser) {
                     Menu {

@@ -23,7 +23,7 @@ extension PostDataSource : PostDataSourceProtocol {
         }
         
         let (data, _) = try await httpManager.POST(
-            url: URL(string: Constants.postsEndpoint()),
+            url: URL(string: Constants.postsEndpoint),
             accessToken: getAccessToken(),
             revokeAccessToken: { revokeAccessToken() },
             body: jsonData

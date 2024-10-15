@@ -26,7 +26,7 @@ import SwiftUICore
     
     func fetchPosts() async throws {
         isLoading = true
-        let result = try await getAllPostsUseCase.execute(request: GetAllPostsRequest(filter: nil, page: page, pageSize: Constants.pageSize))
+        let result = try await getAllPostsUseCase.execute(request: GetAllPostsRequest(filter: nil, page: page, pageSize: Constants.pageSize, userId: nil))
         switch result {
         case .success(let posts):
             self.posts = posts
