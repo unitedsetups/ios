@@ -50,4 +50,22 @@ extension PostRepository : PostRepositoryProtocol {
             throw error
         }
     }
+    
+    func likePost(id: String) async throws -> Post {
+        do {
+            let data = try await dataSource.likePost(id: id)
+            return PostMapper.mapPostResponseToDomain(input: data)
+        } catch {
+            throw error
+        }
+    }
+    
+    func dislikePost(id: String) async throws -> Post {
+        do {
+            let data = try await dataSource.dislikePost(id: id)
+            return PostMapper.mapPostResponseToDomain(input: data)
+        } catch {
+            throw error
+        }
+    }
 }

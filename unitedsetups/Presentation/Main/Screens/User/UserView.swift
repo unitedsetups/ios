@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct UserView: View {
-    @StateObject var userViewModel: UserViewModel = UserViewModel(getUserByIdUseCase: Injection.shared.provideGetUserByIdUseCase(), getMyProfileUseCase: Injection.shared.provideGetMyProfileUseCase(), getAllPostsUseCase: Injection.shared.provideGetAllPostsUseCase())
+    @StateObject var userViewModel: UserViewModel = UserViewModel(getUserByIdUseCase: Injection.shared.provideGetUserByIdUseCase(), getMyProfileUseCase: Injection.shared.provideGetMyProfileUseCase(), getAllPostsUseCase: Injection.shared.provideGetAllPostsUseCase(), likePostUseCase: Injection.shared.provideLikePostUseCase())
     
     @State var userId: String?
     
@@ -25,10 +25,29 @@ struct UserView: View {
                             SkeletonLoadingPost()
                         }
                         .blinking(duration: 0.75)
+                        .onAppear {
+                            Task {
+                                do {
+                                    try await userViewModel.fetchPostsByUserId(userId: userId)
+                                } catch {
+                                    print(userViewModel.errorMessage ?? "Couldn't fetch posts by user id")
+                                }
+                            }
+                        }
                     }
-                    ForEach(userViewModel.posts, id: \.id) {
+                    ForEach(userViewModel.posts, id: \.self) {
                         post in
-                        PostItem(post: post, isLoggedInUser: UUID(uuidString: userViewModel.loggedInUserId!) == post.postedBy.id)
+                        PostItem(
+                            post: post,
+                            isLoggedInUser: UUID(uuidString: userViewModel.loggedInUserId!) == post.postedBy.id,
+                            postIdLoading: userViewModel.postIdLoading
+                        ) { id, index in
+                            do {
+                                try await userViewModel.likePost(id: id, liked: index)
+                            } catch {
+                                print(error)
+                            }
+                        }
                     }
                 }
                 .padding(8)
@@ -36,13 +55,6 @@ struct UserView: View {
             }
         }
         .refreshable {
-            do {
-                try await userViewModel.fetchPostsByUserId(userId: userId)
-            } catch {
-                print(userViewModel.errorMessage ?? "Couldn't fetch posts by user id")
-            }
-        }
-        .task {
             do {
                 try await userViewModel.fetchPostsByUserId(userId: userId)
             } catch {

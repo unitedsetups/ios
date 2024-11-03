@@ -64,6 +64,36 @@ extension PostDataSource : PostDataSourceProtocol {
         }
     }
     
+    func likePost(id: String) async throws -> PostResponse {
+        let (data, _) = try await httpManager.PUT(
+            url: URL(string: Constants.likePost(id)),
+            accessToken: getAccessToken(),
+            revokeAccessToken: { revokeAccessToken() },
+            body: nil
+        )
+        
+        do {
+            return try JSONDecoder().decode(PostResponse.self, from: data)
+        } catch {
+            throw URLErrors.ParsingError
+        }
+    }
+    
+    func dislikePost(id: String) async throws -> PostResponse {
+        let (data, _) = try await httpManager.PUT(
+            url: URL(string: Constants.dislikePost(id)),
+            accessToken: getAccessToken(),
+            revokeAccessToken: { revokeAccessToken() },
+            body: nil
+        )
+        
+        do {
+            return try JSONDecoder().decode(PostResponse.self, from: data)
+        } catch {
+            throw URLErrors.ParsingError
+        }
+    }
+    
     private func revokeAccessToken() {
         _ = tokenManager.saveAccessToken(access_token: "")
     }

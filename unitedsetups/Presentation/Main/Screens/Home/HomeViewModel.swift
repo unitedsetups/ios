@@ -8,24 +8,28 @@
 import Foundation
 import SwiftUICore
 
-@MainActor class HomeViewModel: ObservableObject {
+@Observable class HomeViewModel {
     let getAllPostsUseCase: GetAllPostsUseCase
+    let likePostUseCase: LikePostUseCase
     let tokenManager: TokenManager = Injection.shared.provideTokenManager()
     
-    @State private var page = 0
+    private var page = 0
     
-    @Published var posts: [Post] = []
-    @Published var isLoading: Bool = true
-    @Published var errorMessage: String? = nil
-    @Published var loggedInUserId: String? = nil
+    var posts: [Post] = []
+    var isLoading: Bool = true
+    var errorMessage: String? = nil
+    var loggedInUserId: String? = nil
+    var postIdLoading: String? = nil
     
-    init(getAllPostsUseCase: GetAllPostsUseCase) {
+    init(getAllPostsUseCase: GetAllPostsUseCase, likePostUseCase: LikePostUseCase) {
         self.getAllPostsUseCase = getAllPostsUseCase
+        self.likePostUseCase = likePostUseCase
         self.loggedInUserId = tokenManager.getUserId()
     }
     
     func fetchPosts() async throws {
-        isLoading = true
+        self.isLoading = true
+        self.posts = []
         let result = try await getAllPostsUseCase.execute(request: GetAllPostsRequest(filter: nil, page: page, pageSize: Constants.pageSize, userId: nil))
         switch result {
         case .success(let posts):
@@ -33,6 +37,24 @@ import SwiftUICore
             self.isLoading = false
         case .failure(let failure):
             self.isLoading = false
+            self.errorMessage = failure.localizedDescription
+        }
+    }
+    
+    func likePost(id: String, liked: Bool) async throws {
+        self.postIdLoading = id
+        let result = try await likePostUseCase.execute(id: id, liked: liked)
+        switch result {
+        case .success(let post):
+            self.postIdLoading = nil
+            guard let index = self.posts.firstIndex(where: { pt in pt.id == post.id }) else {
+                self.postIdLoading = nil
+                return
+            }
+            self.posts.remove(at: index)
+            self.posts.insert(post, at: index)
+        case .failure(let failure):
+            self.postIdLoading = nil
             self.errorMessage = failure.localizedDescription
         }
     }

@@ -11,19 +11,27 @@ import SwiftUI
     let getUserByIdUseCase: GetUserByIdUseCase
     let getMyProfileUseCase: GetMyProfileUseCase
     let getAllPostsUseCase: GetAllPostsUseCase
+    let likePostUseCase: LikePostUseCase
     let tokenManager: TokenManager = Injection.shared.provideTokenManager()
     
     @State private var page: Int = 0
-    @Published var isLoading: Bool = false
+    @Published var isLoading: Bool = true
     @Published var user: User? = nil
     @Published var posts: [Post] = []
     @Published var errorMessage: String? = nil
     @Published var loggedInUserId: String? = nil
+    @Published var postIdLoading: String? = nil
     
-    init(getUserByIdUseCase: GetUserByIdUseCase, getMyProfileUseCase: GetMyProfileUseCase, getAllPostsUseCase: GetAllPostsUseCase) {
+    init(
+        getUserByIdUseCase: GetUserByIdUseCase,
+        getMyProfileUseCase: GetMyProfileUseCase,
+        getAllPostsUseCase: GetAllPostsUseCase,
+        likePostUseCase: LikePostUseCase
+    ) {
         self.getAllPostsUseCase = getAllPostsUseCase
         self.getMyProfileUseCase = getMyProfileUseCase
         self.getUserByIdUseCase = getUserByIdUseCase
+        self.likePostUseCase = likePostUseCase
         self.loggedInUserId = tokenManager.getUserId()
     }
     
@@ -68,5 +76,22 @@ import SwiftUI
             }
         }
         
+    }
+    
+    func likePost(id: String, liked: Bool) async throws {
+        self.postIdLoading = id
+        let result = try await likePostUseCase.execute(id: id, liked: liked)
+        switch result {
+        case .success(let post):
+            guard let index = self.posts.firstIndex(where: { pt in pt.id == post.id }) else {
+                self.postIdLoading = nil
+                return
+            }
+            self.posts[index] = post
+            self.postIdLoading = nil
+        case .failure(let failure):
+            self.postIdLoading = nil
+            self.errorMessage = failure.localizedDescription
+        }
     }
 }

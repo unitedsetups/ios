@@ -8,7 +8,7 @@
 import SwiftUI
 import PhotosUI
 
-@MainActor class NewPostViewModel: ObservableObject {
+@MainActor class NewPostViewModel: Observable, ObservableObject {
     var uploadDataSource: UploadDataSource = Injection.shared.provideUploadDataSource()
     var createNewPostUseCase: CreateNewPostUseCase = Injection.shared.provideCreateNewPostUseCase()
     

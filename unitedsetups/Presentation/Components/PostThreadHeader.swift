@@ -1,23 +1,22 @@
 //
-//  PostPostedByDetails.swift
+//  PostThreadHeader.swift
 //  unitedsetups
 //
-//  Created by Paras KCD on 11/10/24.
+//  Created by Paras KCD on 2/11/24.
 //
 
 import SwiftUI
 
-struct PostHeader: View {
-    var post: Post
-    var isLoggedInUser: Bool
+struct PostThreadHeader: View {
+    var postThread: PostThread
     
     var body: some View {
         VStack {
             HStack {
                 NavigationLink {
-                    UserView(userId: post.postedBy.id.uuidString)
+                    UserView(userId: postThread.postedBy.id.uuidString)
                 } label: {
-                    if (post.postedBy.profileImageThumbnailUrl == nil) {
+                    if (postThread.postedBy.profileImageThumbnailUrl == nil) {
                         ZStack {
                             Image("Person")
                                 .frame(width: 32, height: 32)
@@ -27,7 +26,7 @@ struct PostHeader: View {
                         .clipShape(Circle())
                         .shadow(radius: 16)
                     } else {
-                        AsyncImage(url: URL(string: post.postedBy.profileImageThumbnailUrl!)) {
+                        AsyncImage(url: URL(string: postThread.postedBy.profileImageThumbnailUrl!)) {
                             result in
                             if result.image == nil {
                                 Color("Background")
@@ -43,40 +42,17 @@ struct PostHeader: View {
                         .shadow(radius: 16)
                     }
                     
-                    Text(post.postedBy.name)
+                    Text(postThread.postedBy.name)
                         .font(.caption)
-                    Text(" @\(post.postedBy.username)")
+                    Text(" @\(postThread.postedBy.username)")
                         .font(.caption)
                         .foregroundStyle(.opacity(0.5))
-                }
-                
-                Spacer()
-                if (isLoggedInUser) {
-                    Menu {
-                        Button("Add Device") {
-                            
-                        }
-                        Button("Add Setup Items") {
-                            
-                        }
-                        Button("Edit Post") {
-                            
-                        }
-                        Divider()
-                        Button("Delete", role: .destructive) {
-                            
-                        }
-                    } label: {
-                        Image("MoreMenu")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 24, height: 24)
-                    }
-                    .contentShape(Circle())
+                    
+                    Spacer()
                 }
             }
             HStack {
-                Text(post.text)
+                Text(postThread.text)
                     .font(.body)
                 Spacer()
             }

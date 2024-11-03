@@ -7,25 +7,28 @@
 
 import Foundation
 
-struct Post : Equatable {
+struct Post : Equatable, Identifiable, Hashable {
     let id: UUID
     let text: String
     let createdDateTime: Date
     let updatedDateTime: Date
-    let upvotes: Int32
-    let clicks: Int32
+    var upvotes: Int32
+    var clicks: Int32
     let deviceId: UUID?
     let postMediaUrls: [PostMediaUrl]
+    var postThreads: [PostThread]
     let postedBy: PostedBy
+    var liked: Bool
+    var disliked: Bool
 }
 
-struct PostMediaUrl : Equatable, Hashable {
+struct PostMediaUrl : Equatable, Hashable, Identifiable {
     let id: UUID
     let path: String
     let thumbnailPath: String
 }
 
-struct PostedBy : Equatable {
+struct PostedBy : Equatable, Identifiable, Hashable {
     let id: UUID
     let name: String
     let username: String

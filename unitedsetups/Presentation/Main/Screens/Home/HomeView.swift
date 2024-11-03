@@ -8,8 +8,11 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var homeViewModel : HomeViewModel = .init(getAllPostsUseCase: Injection.shared.provideGetAllPostsUseCase())
-    @StateObject var newPostViewModel : NewPostViewModel = NewPostViewModel()
+    @State var homeViewModel: HomeViewModel = .init(
+        getAllPostsUseCase: Injection.shared.provideGetAllPostsUseCase(),
+        likePostUseCase: Injection.shared.provideLikePostUseCase()
+    )
+    @StateObject var newPostViewModel: NewPostViewModel = NewPostViewModel()
     
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
@@ -22,10 +25,33 @@ struct HomeView: View {
                             SkeletonLoadingPost()
                         }
                         .blinking(duration: 0.75)
+                        .onAppear {
+                            Task {
+                                do {
+                                    try await homeViewModel.fetchPosts()
+                                } catch {
+                                    print(homeViewModel.errorMessage ?? "Couldn't fetch posts")
+                                }
+                            }
+                        }
                     }
-                    ForEach(homeViewModel.posts, id: \.id) {
-                        post in
-                        PostItem(post: post, isLoggedInUser: UUID(uuidString: homeViewModel.loggedInUserId!) == post.postedBy.id)
+                    if (homeViewModel.posts.count > 0) {
+                        ForEach(homeViewModel.posts, id: \.self) {
+                            post in
+                            Group {
+                                PostItem(
+                                    post: post,
+                                    isLoggedInUser: UUID(uuidString: homeViewModel.loggedInUserId!) == post.postedBy.id,
+                                    postIdLoading: homeViewModel.postIdLoading
+                                ) { id, liked in
+                                    do {
+                                        try await homeViewModel.likePost(id: id, liked: liked)
+                                    } catch {
+                                        print(error)
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 .padding(8)
@@ -52,13 +78,6 @@ struct HomeView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 16))
                     .shadow(radius: 16)
                     .padding()
-            }
-        }
-        .task {
-            do {
-                try await homeViewModel.fetchPosts()
-            } catch {
-                print(homeViewModel.errorMessage ?? "Couldn't fetch posts")
             }
         }
         .frame(maxWidth: .infinity)

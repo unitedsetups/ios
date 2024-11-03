@@ -49,4 +49,16 @@ struct Injection {
     func provideGetMyProfileUseCase() -> GetMyProfileUseCase {
         return GetMyProfileImpl(repo: UserRepository.sharedInstance(UserDataSource.shared))
     }
+    
+    func provideLikePostUseCase() -> LikePostUseCase {
+        return LikePostImpl(repo: PostRepository.sharedInstance(PostDataSource.shared))
+    }
+    
+    func provideCreatePostThreadUseCase() -> CreatePostThreadUseCase {
+        return CreatePostThreadImpl(repo: PostThreadRepository.sharedInstance(PostThreadDataSource.shared))
+    }
+    
+    func provideLikePostThreadUseCase() -> LikePostThreadUseCase {
+        return LikePostThreadImpl(repo: PostThreadRepository.sharedInstance(PostThreadDataSource.shared))
+    }
 }

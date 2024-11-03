@@ -16,8 +16,11 @@ struct PostResponse : Decodable {
     let clicks: Int32
     let deviceId: String?
     let postMediaUrls: [PostMediaUrlResponse]
+    let postThreads: [PostThreadResponse]
     let postedById: String
     let postedBy: PostedByResponse
+    let liked: Bool
+    let disliked: Bool
 }
 
 struct PostMediaUrlResponse : Decodable {
@@ -62,7 +65,13 @@ enum PostMapper {
             postMediaUrls: response.postMediaUrls.map({ PostMediaUrlResponse in
                 return PostMapper.mapPostMediaUrlResponsetoDomain(input: PostMediaUrlResponse)
             }),
-            postedBy: PostMapper.mapPostedByResponseToDomain(input: response.postedBy, userId: response.postedById)
+            postThreads: response.postThreads.map({
+                PostThread in
+                return PostThreadMapper.mapPostThreadResponseToDomain(input: PostThread)
+            }),
+            postedBy: PostMapper.mapPostedByResponseToDomain(input: response.postedBy, userId: response.postedById),
+            liked: response.liked,
+            disliked: response.disliked
         )
     }
 }

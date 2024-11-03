@@ -8,49 +8,86 @@
 import SwiftUI
 
 struct PostFooter: View {
-    @State var upvotes: Int32
-    @State var firstPostMediaUrl: URL
-    @State var createdDateTime: Date
+    @State var post: Post
     @State var shareText: String
+    @State var postIdLoading: String?
+    var likePost: (String, Bool) async throws -> Void
+    
     var body: some View {
         HStack {
             HStack {
-                Button {
-                    
-                } label: {
-                    HStack {
-                        Image("ThumbsUp")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 24, height: 24)
-                        Text(upvotes.description)
+                if postIdLoading == post.id.uuidString {
+                    ProgressView()
+                        .foregroundStyle(.accent)
+                }
+                else {
+                    Button {
+                        Task {
+                            try? await likePost(post.id.uuidString, true)
+                        }
+                    } label: {
+                        HStack {
+                            if post.liked {
+                                Image("FilledThumbsUp")
+                                    .renderingMode(.template)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 24, height: 24)
+                                    .foregroundStyle(.accent)
+                            }
+                            else {
+                                Image("ThumbsUp")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 24, height: 24)
+                            }
+                            
+                            Text(post.upvotes.description)
+                        }
                     }
-                }
-                .contentShape(Rectangle())
+                    .contentShape(Rectangle())
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 4)
 
-                Divider()
-                
-                Button {
+                    Divider()
                     
-                } label: {
-                    Image("ThumbsDown")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 24, height: 24)
+                    Button {
+                        Task {
+                            try? await likePost(post.id.uuidString, false)
+                        }
+                    } label: {
+                        if post.disliked {
+                            Image("FilledThumbsDown")
+                                .renderingMode(.template)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 24, height: 24)
+                                .foregroundStyle(.accent)
+                        } else {
+                            Image("ThumbsDown")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 24, height: 24)
+                        }
+                    }
+                    .contentShape(Rectangle())
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 4)
                 }
-                .contentShape(Rectangle())
             }
             .padding(8)
             .background(.white.opacity(0.05))
             .cornerRadius(16)
             
-            Button {
-                
+            NavigationLink {
+                PostView(postId: post.id.uuidString)
             } label: {
                 Image("Comment")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 24, height: 24)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
             }
             .contentShape(Rectangle())
             .padding(8)
@@ -59,11 +96,13 @@ struct PostFooter: View {
             
             Spacer()
             
-            ShareLink(item: firstPostMediaUrl, preview: SharePreview(shareText)) {
+            ShareLink(item: post.postMediaUrls[0].path, preview: SharePreview(shareText)) {
                 Image("Share")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 24, height: 24)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
             }
             .contentShape(Rectangle())
             .padding(8)
@@ -72,7 +111,7 @@ struct PostFooter: View {
         }
         
         HStack {
-            Text(createdDateTime, format: .relative(presentation: .numeric))
+            Text(post.createdDateTime, format: .relative(presentation: .numeric))
                 .font(.caption2)
                 .foregroundStyle(.opacity(0.5))
             Spacer()

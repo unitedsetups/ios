@@ -10,17 +10,19 @@ import SwiftUI
 struct PostItem: View {
     @State var post: Post
     @State var isLoggedInUser: Bool
+    @State var postIdLoading: String?
+    var likePost: (String, Bool) async throws -> Void
+    
     var body: some View {
         VStack {
-            PostHeader(postedByName: post.postedBy.name, postedByUsername: post.postedBy.username, asyncProfilePictureUrl: post.postedBy.profileImageThumbnailUrl == nil ? nil : URL(string: "\(Constants.baseUrl)/\(post.postedBy.profileImageThumbnailUrl!)"), isLoggedInUser: isLoggedInUser, text: post.text, userId: post.postedBy.id.uuidString)
+            PostHeader(post: post, isLoggedInUser: isLoggedInUser)
             PostMedia(postMediaUrls: post.postMediaUrls)
-            PostFooter(upvotes: post.upvotes, firstPostMediaUrl: URL(string: "\(Constants.baseUrl)/\(post.postMediaUrls[0].path)")!, createdDateTime: post.createdDateTime, shareText: "User @\(post.postedBy.username) posted this Amazing Setup in United Setups, check it out.")
+            PostFooter(post: post, shareText: "User @\(post.postedBy.username) posted this Amazing Setup in United Setups, check it out.", postIdLoading: postIdLoading, likePost: likePost)
         }
         .padding()
         .frame(maxWidth: .infinity)
         .background(Color("Surface"))
         .cornerRadius(16)
-        .padding(8)
         .shadow(radius: 16)
     }
 }
