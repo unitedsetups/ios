@@ -47,7 +47,7 @@ struct PostImageView: View {
                 }
             }
             .tabViewStyle(.page)
-            .onChange(of: selectedPostMedia) { _, _ in
+            .onChange(of: selectedPostMedia) { _ in
                 self.changeOpacity = 0
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                     self.changeOpacity = 0.4

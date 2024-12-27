@@ -81,6 +81,7 @@ struct PostFooter: View {
             
             NavigationLink {
                 PostView(postId: post.id.uuidString)
+                    .addKeyboardVisitibilityToEnvironment()
             } label: {
                 Image("Comment")
                     .resizable()

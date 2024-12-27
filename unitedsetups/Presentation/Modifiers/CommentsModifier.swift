@@ -10,6 +10,7 @@ import PhotosUI
 
 struct CommentsModifier: ViewModifier {
     @State var viewModel: PostViewModel
+    @State var loading: Bool = false
     
     init (viewModel: PostViewModel) {
         self.viewModel = viewModel
@@ -17,6 +18,7 @@ struct CommentsModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
+            .ignoresSafeArea(.container)
             .frame(maxWidth: .infinity)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -34,9 +36,10 @@ struct CommentsModifier: ViewModifier {
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
                     HStack {
-                        if !viewModel.isLoading {
+                        if !loading {
                             NewPostBottomBarButtons(selectedPhotos: $viewModel.selectedPhotos) {
                                 Task {
+                                    loading = true
                                     try await viewModel.createNewPostThread()
                                 }
                             }
@@ -50,9 +53,10 @@ struct CommentsModifier: ViewModifier {
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
                     HStack {
-                        if !viewModel.isLoading {
+                        if !loading {
                             NewPostBottomBarButtons(selectedPhotos: $viewModel.selectedPhotos) {
                                 Task {
+                                    loading = true
                                     try await viewModel.createNewPostThread()
                                 }
                             }

@@ -16,13 +16,13 @@ struct EmailTextField: View {
                 "",
                 text: $email,
                 prompt: Text("Email Address")
-                    .foregroundStyle(.white.opacity(0.5))
+                    .foregroundColor(.white.opacity(0.5))
             )
             .autocorrectionDisabled()
             .textInputAutocapitalization(.never)
             .keyboardType(.emailAddress)
             .textContentType(.emailAddress)
-            .foregroundStyle(.white)
+            .foregroundColor(.white)
             
             Image("Mail")
                 .resizable()

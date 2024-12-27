@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import PhotosUI
 
-@Observable class PostViewModel {
+@MainActor class PostViewModel: ObservableObject, Observable {
     let getPostByIdUseCase: GetPostByIdUseCase = Injection.shared.provideGetPostByIdUseCase()
     let likePostUseCase: LikePostUseCase = Injection.shared.provideLikePostUseCase()
     let tokenManager: TokenManager = Injection.shared.provideTokenManager()
@@ -17,15 +17,15 @@ import PhotosUI
     let createPostThreadUseCase: CreatePostThreadUseCase = Injection.shared.provideCreatePostThreadUseCase()
     let likePostThreadUseCase: LikePostThreadUseCase = Injection.shared.provideLikePostThreadUseCase()
     
-    var post: Post? = nil
-    var isLoading: Bool = true
-    var errorMessage: String? = nil
-    var loggedInUserId: String? = nil
-    var postThreadIdLoading: String? = nil
-    var images: [UIImage] = []
-    var selectedPhotos: [PhotosPickerItem] = []
-    var postThreadText: String = ""
-    var parentPostThread: PostThread? = nil
+    @Published var post: Post? = nil
+    @Published var isLoading: Bool = true
+    @Published var errorMessage: String? = nil
+    @Published var loggedInUserId: String? = nil
+    @Published var postThreadIdLoading: String? = nil
+    @Published var images: [UIImage] = []
+    @Published var selectedPhotos: [PhotosPickerItem] = []
+    @Published var postThreadText: String = ""
+    @Published var parentPostThread: PostThread? = nil
     
     init() {
         self.loggedInUserId = tokenManager.getUserId()

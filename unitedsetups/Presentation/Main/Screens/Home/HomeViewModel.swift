@@ -8,18 +8,18 @@
 import Foundation
 import SwiftUICore
 
-@Observable class HomeViewModel {
+@MainActor class HomeViewModel: Observable, ObservableObject {
     let getAllPostsUseCase: GetAllPostsUseCase
     let likePostUseCase: LikePostUseCase
     let tokenManager: TokenManager = Injection.shared.provideTokenManager()
     
     private var page = 0
     
-    var posts: [Post] = []
-    var isLoading: Bool = true
-    var errorMessage: String? = nil
-    var loggedInUserId: String? = nil
-    var postIdLoading: String? = nil
+    @Published var posts: [Post] = []
+    @Published var isLoading: Bool = true
+    @Published var errorMessage: String? = nil
+    @Published var loggedInUserId: String? = nil
+    @Published var postIdLoading: String? = nil
     
     init(getAllPostsUseCase: GetAllPostsUseCase, likePostUseCase: LikePostUseCase) {
         self.getAllPostsUseCase = getAllPostsUseCase

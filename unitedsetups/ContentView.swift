@@ -13,7 +13,7 @@ struct ContentView: View {
     var body: some View {
         if (!authViewModel.isLoggedIn) {
             AuthenticationView()
-                .environment(authViewModel)
+                .environmentObject(authViewModel)
         } else {
             MainView()
         }

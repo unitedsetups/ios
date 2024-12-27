@@ -19,6 +19,7 @@ struct NewPostModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
+            .edgesIgnoringSafeArea(.bottom)
             .frame(maxWidth: .infinity)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -63,6 +64,7 @@ struct NewPostModifier: ViewModifier {
                         }
                     }
                     .frame(width: UIScreen.main.bounds.width)
+                    .frame(height: 56)
                     .background(Color("Surface"))
                 }
             }

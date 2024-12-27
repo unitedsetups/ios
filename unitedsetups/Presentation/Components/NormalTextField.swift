@@ -18,13 +18,13 @@ struct NormalTextField: View {
                 "",
                 text: $binding,
                 prompt: Text(promptText)
-                    .foregroundStyle(.white.opacity(0.5))
+                    .foregroundColor(.white.opacity(0.5))
             )
             .autocorrectionDisabled()
             .textInputAutocapitalization(.never)
             .keyboardType(.emailAddress)
             .textContentType(.emailAddress)
-            .foregroundStyle(.white)
+            .foregroundColor(.white)
             
             Image(icon)
                 .resizable()

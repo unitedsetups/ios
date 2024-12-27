@@ -17,14 +17,14 @@ struct PasswordTextField: View {
                     "",
                     text: $password,
                     prompt: Text("Password")
-                        .foregroundStyle(.white.opacity(0.5))
+                        .foregroundColor(.white.opacity(0.5))
                 )
             } else {
                 SecureField(
                     "Password",
                     text: $password,
                     prompt: Text("Password")
-                        .foregroundStyle(.white.opacity(0.5))
+                        .foregroundColor(.white.opacity(0.5))
                 )
             }
             Button(action: { passwordVisible = !passwordVisible }) {

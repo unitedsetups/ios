@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State var homeViewModel: HomeViewModel = .init(
+    @StateObject var homeViewModel: HomeViewModel = .init(
         getAllPostsUseCase: Injection.shared.provideGetAllPostsUseCase(),
         likePostUseCase: Injection.shared.provideLikePostUseCase()
     )

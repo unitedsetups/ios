@@ -10,7 +10,8 @@ import SwiftUI
 struct PostView: View {
     var postId: String
     @State var size: CGSize = .zero
-    @Bindable var postViewModel: PostViewModel = .init()
+    @Environment(\.keyboardShowing) var keyboardShowing
+    @StateObject var postViewModel: PostViewModel = .init()
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -28,6 +29,7 @@ struct PostView: View {
                             }
                     }
                     if (postViewModel.post != nil) {
+                        
                         Group {
                             ForEach(Array([postViewModel.post!]), id: \.self) {
                                 post in
@@ -36,26 +38,31 @@ struct PostView: View {
                                         try await postViewModel.likePost(liked: liked)
                                     }
                                 }
+                                .padding(.top, 64 * 1.4)
                                 .foregroundStyle(Color.white)
-                                LazyVStack {
-                                    ForEach(Array(post.postThreads.enumerated()), id: \.element) {
-                                        index, postThread in
-                                        PostThreadItem(postThread: postThread, isChild: false, likePostThread: {id, liked in
-                                            try await postViewModel.likePostThread(postThreadId: id, liked: liked)
-                                        }, selectPostThread: {selected in postViewModel.selectPostThreadParent(selected: selected)
-                                        })
-                                        if index != (post.postThreads.count - 1) {
-                                            Divider()
-                                                .background(Color.gray)
+                                
+                                if (post.postThreads.count > 0) {
+                                    LazyVStack {
+                                        ForEach(Array(post.postThreads.enumerated()), id: \.element) {
+                                            index, postThread in
+                                            PostThreadItem(postThread: postThread, isChild: false, likePostThread: {id, liked in
+                                                try await postViewModel.likePostThread(postThreadId: id, liked: liked)
+                                            }, selectPostThread: {selected in postViewModel.selectPostThreadParent(selected: selected)
+                                            })
+                                            if index != (post.postThreads.count - 1) {
+                                                Divider()
+                                                    .background(Color.gray)
+                                            }
                                         }
                                     }
+                                    .foregroundColor(Color.white)
+                                    .padding()
+                                    .background(Color("Surface"))
+                                    .cornerRadius(16)
+                                    .shadow(radius: 16)
+                                    .padding(.bottom, size.height)
                                 }
-                                .foregroundStyle(Color.white)
-                                .padding()
-                                .background(Color("Surface"))
-                                .cornerRadius(16)
-                                .shadow(radius: 16)
-                                .padding(.bottom, size.height)
+                                
                             }
                         }
                         .padding(8)
@@ -87,7 +94,7 @@ struct PostView: View {
                         .contentShape(Rectangle())
                     }
                     .padding()
-                    .foregroundStyle(.white)
+                    .foregroundColor(.white)
                     .background(Color("Background"))
                     .cornerRadius(16)
                     .padding(8)
@@ -99,14 +106,14 @@ struct PostView: View {
                         .padding(.vertical, 8)
                         .padding(.horizontal, 16)
                         .font(.footnote)
-                        .foregroundStyle(.accent)
+                        .foregroundColor(.accent)
                 }
                 
                 TextField(
                     "",
                     text: $postViewModel.postThreadText,
                     prompt: Text("What's on your mind?")
-                        .foregroundStyle(.white.opacity(0.5)),
+                        .foregroundColor(.white.opacity(0.5)),
                     axis: .vertical
                 )
                 .lineLimit(1...30)
@@ -114,6 +121,7 @@ struct PostView: View {
                 .padding(.horizontal, 16)
             }
             .padding()
+            .padding(.bottom, keyboardShowing ? 0 : 56*1.5)
             .background(Color("Surface"))
             .cornerRadius(16, corners: [.topLeft, .topRight])
             .shadow(radius: 16)

@@ -69,7 +69,7 @@ struct NewPostView: View {
                         "",
                         text: $viewModel.postText,
                         prompt: Text("What's on your mind?")
-                            .foregroundStyle(.white.opacity(0.5)),
+                            .foregroundColor(.white.opacity(0.5)),
                         axis: .vertical
                     )
                     .lineLimit(1...30)
@@ -80,17 +80,17 @@ struct NewPostView: View {
                     
                     Spacer()
                     
-                    Color.clear.frame(height: 32)
+                    Color("Surface").frame(maxWidth: .infinity, maxHeight: 56)
                 }
             }
             .NewPostStyle(viewModel: viewModel)
             .onAppear() {
                 focussed = true
             }
-            .onChange(of: viewModel.selectedPhotos) { _, _ in
+            .onChange(of: viewModel.selectedPhotos) { _ in
                 viewModel.convertDataToImage()
             }
-            .onChange(of: viewModel.newPost) { _, _ in
+            .onChange(of: viewModel.newPost) { _ in
                 dismiss()
             }
             if viewModel.loading {
