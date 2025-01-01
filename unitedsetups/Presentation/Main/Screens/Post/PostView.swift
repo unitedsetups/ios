@@ -47,7 +47,8 @@ struct PostView: View {
                                             try await postViewModel.deletePost()
                                             self.presentationMode.wrappedValue.dismiss()
                                         }
-                                    }
+                                    },
+                                    inComments: true
                                 )
                                 .padding(.top, 64 * 1.4)
                                 .foregroundStyle(Color.white)
@@ -146,6 +147,7 @@ struct PostView: View {
         }
         .onDisappear {
             postViewModel.post = nil
+            postViewModel.isLoading = true
         }
         .CommentsStyle(viewModel: postViewModel)
     }
