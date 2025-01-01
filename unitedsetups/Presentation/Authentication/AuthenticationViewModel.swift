@@ -30,6 +30,7 @@ import Foundation
     func login() async throws {
         isLoading = true
         let result = try await loginUseCase.execute(request: LoginRequest(email: email, password: password))
+        
         switch result {
             case .success(let auth):
                 self.auth = auth
@@ -38,7 +39,9 @@ import Foundation
                 self.isLoading = false
             case .failure(let failure):
                 self.isLoading = false
-                self.errorMessage = failure.localizedDescription
+                if (failure.localizedDescription == "Invalid credentials") {
+                    self.errorMessage = "Invalid email or password"
+                }
         }
     }
     
@@ -53,5 +56,11 @@ import Foundation
                 self.isLoading = false
                 self.errorMessage = failure.localizedDescription
         }
+    }
+    
+    func signOut() {
+        tokenManager.revokeAccessToken()
+        self.auth = nil
+        self.isLoggedIn = false
     }
 }

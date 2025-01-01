@@ -9,37 +9,57 @@ import SwiftUI
 
 struct UserProfileHeader: View {
     var userData: User?
+    var signOutAction: () -> Void
     
     var body: some View {
         ZStack(alignment: Alignment.center) {
             if (userData != nil) {
                 let user = userData!
                 
-                if (user.coverImageUrl != nil) {
-                    let coverImageUrl = user.coverImageUrl!
-                    AsyncImage(url: URL(string: "\(Constants.baseUrl)/\(coverImageUrl)")) {
-                        result in
-                        if (result.image != nil) {
-                            result.image!
-                                .resizable()
-                                .scaledToFill()
-                                .frame(maxWidth: UIScreen.main.bounds.width, maxHeight: 150)
-                                .cornerRadius(16, corners: [.bottomRight, .bottomLeft])
+                ZStack(alignment: Alignment.topTrailing) {
+                    if (user.coverImageUrl != nil) {
+                        let coverImageUrl = user.coverImageUrl!
+                        AsyncImage(url: URL(string: "\(Constants.baseUrl)/\(coverImageUrl)")) {
+                            result in
+                            if (result.image != nil) {
+                                result.image!
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(maxWidth: UIScreen.main.bounds.width, maxHeight: 150)
+                                    .cornerRadius(16, corners: [.bottomRight, .bottomLeft])
+                            }
                         }
                     }
-                }
-                else {
+                    else {
+                        Rectangle()
+                            .fill(.clear)
+                            .background(Color("Background"))
+                            .frame(maxWidth: UIScreen.main.bounds.width, maxHeight: 150)
+                            .cornerRadius(16, corners: [.bottomRight, .bottomLeft])
+                    }
+                    
                     Rectangle()
                         .fill(.clear)
-                        .background(Color("Background"))
                         .frame(maxWidth: UIScreen.main.bounds.width, maxHeight: 150)
-                        .cornerRadius(16, corners: [.bottomRight, .bottomLeft])
+                        .background(LinearGradient(gradient: Gradient(colors: [Color("Surface"), .clear]), startPoint: .top, endPoint: .bottom))
+                    
+                    Menu {
+                        Button("Edit Profile") {
+                            
+                        }
+                        Divider()
+                        Button("Logout", role: .destructive) {
+                            signOutAction()
+                        }
+                    } label: {
+                        Image("MoreMenu")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 24, height: 24)
+                            .contentShape(Circle())
+                    }
+                    .padding()
                 }
-                
-                Rectangle()
-                    .fill(.clear)
-                    .frame(maxWidth: UIScreen.main.bounds.width, maxHeight: 150)
-                    .background(LinearGradient(gradient: Gradient(colors: [Color("Surface"), .clear]), startPoint: .top, endPoint: .bottom))
                 
                 VStack {
                     if (user.profileImageUrl != nil) {

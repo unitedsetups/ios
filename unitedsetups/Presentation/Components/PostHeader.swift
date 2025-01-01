@@ -71,14 +71,15 @@ struct PostHeader: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 24, height: 24)
+                            .contentShape(Circle())
                     }
-                    .contentShape(Circle())
                 }
             }
-            HStack {
+            LazyVStack {
                 Text(post.text)
+                    .lineLimit(nil)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                     .font(.body)
-                Spacer()
             }
         }
     }

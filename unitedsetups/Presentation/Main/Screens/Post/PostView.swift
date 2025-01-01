@@ -90,8 +90,8 @@ struct PostView: View {
                             Image("Close")
                                 .renderingMode(.template)
                                 .foregroundStyle(.white)
+                                .contentShape(Circle())
                         }
-                        .contentShape(Rectangle())
                     }
                     .padding()
                     .foregroundColor(.white)

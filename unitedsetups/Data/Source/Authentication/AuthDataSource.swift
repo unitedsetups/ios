@@ -20,10 +20,10 @@ extension AuthDataSource : AuthDataSourceProtocol {
     func login(loginRequest: LoginRequest) async throws -> AuthResponse {
         guard let jsonData = try? JSONEncoder().encode(loginRequest) else { throw URLErrors.FailedToEncodeRequest }
         
-        let (data, response) = try await httpManager.POST(
+        let (data, _) = try await httpManager.POST(
             url: URL(string: Constants.loginEndpoint()),
             accessToken: tokenManager.getAccessToken(),
-            revokeAccessToken: { _ = tokenManager.saveAccessToken(access_token: "") },
+            revokeAccessToken: { tokenManager.revokeAccessToken() },
             body: jsonData
         )
         
@@ -37,10 +37,10 @@ extension AuthDataSource : AuthDataSourceProtocol {
     func register(registerRequest: RegisterRequest) async throws -> AuthResponse {
         guard let jsonData = try? JSONEncoder().encode(registerRequest) else { throw URLErrors.FailedToEncodeRequest }
         
-        let (data, response) = try await httpManager.POST(
+        let (data, _) = try await httpManager.POST(
             url: URL(string: Constants.registerEndpoint()),
             accessToken: tokenManager.getAccessToken(),
-            revokeAccessToken: { _ = tokenManager.saveAccessToken(access_token: "") },
+            revokeAccessToken: { tokenManager.revokeAccessToken() },
             body: jsonData
         )
 

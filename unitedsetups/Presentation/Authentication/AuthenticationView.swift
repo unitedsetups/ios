@@ -5,11 +5,14 @@
 //  Created by Paras KCD on 6/10/24.
 //
 
+import AlertToast
 import SwiftUI
 
 struct AuthenticationView: View {
     @State private var isPerformingTask = false
     @State private var register = false
+    @State private var showToast = false
+    @State private var toastMessage: String?
     @EnvironmentObject var viewModel : AuthenticationViewModel
     
     var body: some View {
@@ -37,13 +40,29 @@ struct AuthenticationView: View {
                 PasswordTextField(password: $viewModel.password)
                 
                 Button(action: {
-                    if (viewModel.email.isEmpty || viewModel.password.isEmpty) {
+                    if (register && (viewModel.email.isEmpty || viewModel.password.isEmpty || viewModel.name.isEmpty || viewModel.username.isEmpty)) {
+                        return
+                    }
+                    
+                    if (!register && (viewModel.email.isEmpty || viewModel.password.isEmpty)) {
                         return
                     }
                     
                     isPerformingTask = true
                     Task {
-                        try? await viewModel.login()
+                        if (register) {
+                            try? await viewModel.register()
+                        } else {
+                            try? await viewModel.login()
+                        }
+                        
+                        if (((viewModel.errorMessage?.isEmpty) == false)) {
+                            toastMessage = viewModel.errorMessage ?? nil
+                            viewModel.errorMessage = nil
+                            showToast = true
+                        } else {
+                            register = false
+                        }
                         isPerformingTask = viewModel.isLoading
                     }
                 }){
@@ -60,16 +79,16 @@ struct AuthenticationView: View {
                         }
                         Spacer()
                     }
+                    .contentShape(Capsule())
                 }
-                .contentShape(Rectangle())
                 .frame(maxWidth: .infinity)
                 .padding([.top, .bottom], 8)
-                .background(!isPerformingTask ? .accent : Color("Background"))
-                .foregroundStyle(!isPerformingTask ? .black : .accent.opacity(0.5))
+                .background(isPerformingTask || viewModel.email.isEmpty || viewModel.password.isEmpty || (register && (viewModel.name.isEmpty || viewModel.username.isEmpty)) ? Color("Background") : .accent)
+                .foregroundStyle(isPerformingTask || viewModel.email.isEmpty || viewModel.password.isEmpty || (register && (viewModel.name.isEmpty || viewModel.username.isEmpty)) ? .accent.opacity(0.5) : .black)
                 .clipShape(Capsule())
                 .padding()
                 .shadow(radius: 10)
-                .disabled(isPerformingTask)
+                .disabled(isPerformingTask || viewModel.email.isEmpty || viewModel.password.isEmpty || (register && (viewModel.name.isEmpty || viewModel.username.isEmpty)))
                 
                 Button(action: { register = !register }) {
                     if (register) {
@@ -90,5 +109,8 @@ struct AuthenticationView: View {
         .edgesIgnoringSafeArea(.all)
         .background(Color("Background"))
         .foregroundStyle(.white)
+        .toast(isPresenting: $showToast) {
+            AlertToast(displayMode: .banner(.slide), type: .error(Color("ErrorColor")), title: toastMessage)
+        }
     }
 }

@@ -37,8 +37,8 @@ struct PostThreadFooter: View {
                     
                     Text(postThread.upvotes.description)
                 }
+                .contentShape(Circle())
             }
-            .contentShape(Rectangle())
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
             
@@ -54,14 +54,15 @@ struct PostThreadFooter: View {
                         .scaledToFit()
                         .frame(width: 24, height: 24)
                         .foregroundStyle(.accent)
+                        .contentShape(Circle())
                 } else {
                     Image("ThumbsDown")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 24, height: 24)
+                        .contentShape(Circle())
                 }
             }
-            .contentShape(Rectangle())
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
             
@@ -72,8 +73,8 @@ struct PostThreadFooter: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 24, height: 24)
+                    .contentShape(Circle())
             }
-            .contentShape(Rectangle())
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
             

@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct UserView: View {
+    @EnvironmentObject var authViewModel : AuthenticationViewModel
+    
     @StateObject var userViewModel: UserViewModel = UserViewModel(getUserByIdUseCase: Injection.shared.provideGetUserByIdUseCase(), getMyProfileUseCase: Injection.shared.provideGetMyProfileUseCase(), getAllPostsUseCase: Injection.shared.provideGetAllPostsUseCase(), likePostUseCase: Injection.shared.provideLikePostUseCase())
     
     @State var userId: String?
@@ -15,7 +17,7 @@ struct UserView: View {
     var body: some View {
         ScrollView {
             LazyVStack {
-                UserProfileHeader(userData: userViewModel.user)
+                UserProfileHeader(userData: userViewModel.user, signOutAction: {authViewModel.signOut()})
                 
                 LazyVStack {
                     if (userViewModel.isLoading) {

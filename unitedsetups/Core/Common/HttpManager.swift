@@ -81,20 +81,20 @@ struct HttpManager {
         
         let (data, response) = try await URLSession.shared.data(for: request)
         
-        guard let response = response as? HTTPURLResponse, response.statusCode < 402 else {
-            throw URLErrors.InvalidResponse
+        guard let response = response as? HTTPURLResponse, response.statusCode <= 500 else {
+            throw URLErrors.ServerError
         }
         
         if (response.statusCode == 401) {
             revokeAccessToken()
             throw URLErrors.Unauthorized
-        }
-        
-        if (response.statusCode >= 400) {
+        } else if (response.statusCode == 409) {
+            return (data, response)
+        } else if (response.statusCode >= 400) {
             throw URLErrors.InvalidResponse
+        } else {
+            return (data, response)
         }
-        
-        return (data, response)
     }
     
     static let shared = HttpManager()
