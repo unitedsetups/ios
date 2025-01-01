@@ -13,6 +13,8 @@ struct PostFooter: View {
     @State var postIdLoading: String?
     var likePost: (String, Bool) async throws -> Void
     
+    @State var inComments: Bool = false
+    
     var body: some View {
         HStack {
             HStack {
@@ -84,21 +86,24 @@ struct PostFooter: View {
             .background(.white.opacity(0.05))
             .cornerRadius(16)
             
-            NavigationLink {
-                PostView(postId: post.id.uuidString)
-                    .addKeyboardVisitibilityToEnvironment()
-            } label: {
-                Image("Comment")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 24, height: 24)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .contentShape(Circle())
+            if (!inComments) {
+                NavigationLink {
+                    PostView(postId: post.id.uuidString)
+                        .addKeyboardVisitibilityToEnvironment()
+                } label: {
+                    Image("Comment")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 24)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .contentShape(Circle())
+                }
+                .padding(8)
+                .background(.white.opacity(0.05))
+                .cornerRadius(16)
             }
-            .padding(8)
-            .background(.white.opacity(0.05))
-            .cornerRadius(16)
+            
             
             Spacer()
             
