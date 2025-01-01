@@ -50,6 +50,7 @@ struct PostHeader: View {
                         .font(.caption)
                         .foregroundStyle(.opacity(0.5))
                 }
+                .disabled(isLoggedInUser)
                 
                 Spacer()
                 if (isLoggedInUser) {

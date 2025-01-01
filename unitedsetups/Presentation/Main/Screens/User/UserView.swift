@@ -27,7 +27,7 @@ struct UserView: View {
         ZStack(alignment: .bottomTrailing) {
             ScrollView {
                 LazyVStack {
-                    UserProfileHeader(userData: userViewModel.user, signOutAction: {authViewModel.signOut()})
+                    UserProfileHeader(loggedInUserId: userViewModel.loggedInUserId, userData: userViewModel.user, signOutAction: {authViewModel.signOut()})
                     
                     LazyVStack {
                         if (userViewModel.isLoading) {

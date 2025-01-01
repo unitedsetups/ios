@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct UserProfileHeader: View {
+    var loggedInUserId: String?
     var userData: User?
     var signOutAction: () -> Void
     
@@ -42,23 +43,25 @@ struct UserProfileHeader: View {
                         .fill(.clear)
                         .frame(maxWidth: UIScreen.main.bounds.width, maxHeight: 150)
                         .background(LinearGradient(gradient: Gradient(colors: [Color("Surface"), .clear]), startPoint: .top, endPoint: .bottom))
-                    
-                    Menu {
-                        Button("Edit Profile") {
-                            
+                    if (userData?.id.uuidString == loggedInUserId) {
+                        Menu {
+                            Button("Edit Profile") {
+                                
+                            }
+                            Divider()
+                            Button("Logout", role: .destructive) {
+                                signOutAction()
+                            }
+                        } label: {
+                            Image("MoreMenu")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 24, height: 24)
+                                .contentShape(Circle())
                         }
-                        Divider()
-                        Button("Logout", role: .destructive) {
-                            signOutAction()
-                        }
-                    } label: {
-                        Image("MoreMenu")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 24, height: 24)
-                            .contentShape(Circle())
+                        .padding()
                     }
-                    .padding()
+                    
                 }
                 
                 VStack {
