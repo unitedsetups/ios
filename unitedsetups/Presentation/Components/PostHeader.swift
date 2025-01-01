@@ -10,6 +10,7 @@ import SwiftUI
 struct PostHeader: View {
     var post: Post
     var isLoggedInUser: Bool
+    var deletePost: (String) async throws -> Void
     
     var body: some View {
         VStack {
@@ -64,7 +65,9 @@ struct PostHeader: View {
                         }
                         Divider()
                         Button("Delete", role: .destructive) {
-                            
+                            Task {
+                                try await deletePost(post.id.uuidString)
+                            }
                         }
                     } label: {
                         Image("MoreMenu")

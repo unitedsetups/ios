@@ -51,6 +51,14 @@ extension PostRepository : PostRepositoryProtocol {
         }
     }
     
+    func deletePost(id: String) async throws -> Void {
+        do {
+            try await dataSource.deletePost(id: id)
+        } catch {
+            throw error
+        }
+    }
+    
     func likePost(id: String) async throws -> Post {
         do {
             let data = try await dataSource.likePost(id: id)

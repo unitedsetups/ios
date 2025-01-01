@@ -11,7 +11,8 @@ struct PostView: View {
     var postId: String
     @State var size: CGSize = .zero
     @Environment(\.keyboardShowing) var keyboardShowing
-    @StateObject var postViewModel: PostViewModel = .init()
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @EnvironmentObject var postViewModel: PostViewModel
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -29,15 +30,25 @@ struct PostView: View {
                             }
                     }
                     if (postViewModel.post != nil) {
-                        
                         Group {
                             ForEach(Array([postViewModel.post!]), id: \.self) {
                                 post in
-                                PostItem(post: post, isLoggedInUser: UUID(uuidString: postViewModel.loggedInUserId!) == post.postedBy.id, postIdLoading: nil) { _, liked in
-                                    do {
-                                        try await postViewModel.likePost(liked: liked)
+                                PostItem(
+                                    post: post,
+                                    isLoggedInUser: UUID(uuidString: postViewModel.loggedInUserId!) == post.postedBy.id,
+                                    postIdLoading: nil,
+                                    likePost: { _, liked in
+                                        do {
+                                            try await postViewModel.likePost(liked: liked)
+                                        }
+                                    },
+                                    deletePost: { id in
+                                        do {
+                                            try await postViewModel.deletePost()
+                                            self.presentationMode.wrappedValue.dismiss()
+                                        }
                                     }
-                                }
+                                )
                                 .padding(.top, 64 * 1.4)
                                 .foregroundStyle(Color.white)
                                 
@@ -126,6 +137,9 @@ struct PostView: View {
             .cornerRadius(16, corners: [.topLeft, .topRight])
             .shadow(radius: 16)
             .saveSize(in: $size)
+        }
+        .onDisappear {
+            postViewModel.post = nil
         }
         .CommentsStyle(viewModel: postViewModel)
     }

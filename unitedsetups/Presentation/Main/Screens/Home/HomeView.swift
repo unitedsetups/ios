@@ -10,9 +10,11 @@ import SwiftUI
 struct HomeView: View {
     @StateObject var homeViewModel: HomeViewModel = .init(
         getAllPostsUseCase: Injection.shared.provideGetAllPostsUseCase(),
-        likePostUseCase: Injection.shared.provideLikePostUseCase()
+        likePostUseCase: Injection.shared.provideLikePostUseCase(),
+        deletePostUseCase: Injection.shared.provideDeletePostUseCase()
     )
     @StateObject var newPostViewModel: NewPostViewModel = NewPostViewModel()
+    @EnvironmentObject var postViewModel: PostViewModel
     
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
@@ -42,14 +44,22 @@ struct HomeView: View {
                                 PostItem(
                                     post: post,
                                     isLoggedInUser: UUID(uuidString: homeViewModel.loggedInUserId!) == post.postedBy.id,
-                                    postIdLoading: homeViewModel.postIdLoading
-                                ) { id, liked in
-                                    do {
-                                        try await homeViewModel.likePost(id: id, liked: liked)
-                                    } catch {
-                                        print(error)
+                                    postIdLoading: homeViewModel.postIdLoading,
+                                    likePost: { id, liked in
+                                        do {
+                                            try await homeViewModel.likePost(id: id, liked: liked)
+                                        } catch {
+                                            print(error)
+                                        }
+                                    },
+                                    deletePost: {id in
+                                        do {
+                                            try await homeViewModel.deletePost(id: id)
+                                        } catch {
+                                            print(error)
+                                        }
                                     }
-                                }
+                                )
                             }
                         }
                     }
@@ -62,6 +72,16 @@ struct HomeView: View {
                     try await homeViewModel.fetchPosts()
                 } catch {
                     print(error)
+                }
+            }
+            .onChange(of: newPostViewModel.newPost) { _ in
+                Task {
+                    try await homeViewModel.fetchPosts()
+                }
+            }
+            .onChange(of: postViewModel.post) { _ in
+                Task {
+                    try await homeViewModel.fetchPosts()
                 }
             }
             

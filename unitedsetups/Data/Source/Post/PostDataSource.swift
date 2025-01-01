@@ -94,6 +94,14 @@ extension PostDataSource : PostDataSourceProtocol {
         }
     }
     
+    func deletePost(id: String) async throws -> Void {
+        let (data, _) = try await httpManager.DELETE(
+            url: URL(string: Constants.getPostByIdEndpoint(id)),
+            accessToken: getAccessToken(),
+            revokeAccessToken: { revokeAccessToken() }
+        )
+    }
+    
     private func revokeAccessToken() {
         tokenManager.revokeAccessToken()
     }

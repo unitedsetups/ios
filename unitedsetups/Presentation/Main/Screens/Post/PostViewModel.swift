@@ -12,6 +12,7 @@ import PhotosUI
 @MainActor class PostViewModel: ObservableObject, Observable {
     let getPostByIdUseCase: GetPostByIdUseCase = Injection.shared.provideGetPostByIdUseCase()
     let likePostUseCase: LikePostUseCase = Injection.shared.provideLikePostUseCase()
+    let deletePostUseCase: DeletePostUseCase = Injection.shared.provideDeletePostUseCase()
     let tokenManager: TokenManager = Injection.shared.provideTokenManager()
     let uploadDataSource: UploadDataSource = Injection.shared.provideUploadDataSource()
     let createPostThreadUseCase: CreatePostThreadUseCase = Injection.shared.provideCreatePostThreadUseCase()
@@ -75,6 +76,21 @@ import PhotosUI
             self.isLoading = false
         case .failure(let failure):
             self.isLoading = false
+            self.errorMessage = failure.localizedDescription
+        }
+    }
+    
+    func deletePost() async throws {
+        guard let post = self.post else {
+            return
+        }
+        let result = try await deletePostUseCase.execute(id: post.id.uuidString)
+        switch result {
+        case .success(let deleted):
+            if (deleted) {
+                
+            }
+        case .failure(let failure):
             self.errorMessage = failure.localizedDescription
         }
     }
