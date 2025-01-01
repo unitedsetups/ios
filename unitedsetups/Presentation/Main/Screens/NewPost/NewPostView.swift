@@ -22,17 +22,17 @@ struct NewPostView: View {
                                 ZStack(alignment: .topLeading) {
                                     ZStack {
                                         Image(uiImage: viewModel.images[index])
-                                            .resizable()
-                                            .scaledToFill()
-                                            .frame(height: 256)
-                                            .blur(radius: 20)
-                                            .clipShape(Rectangle())
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(height: 256)
+                                        .blur(radius: 20)
+                                        .clipShape(Rectangle())
                                         
                                         Image(uiImage: viewModel.images[index])
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(height: 256)
-                                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: 256)
+                                        .clipShape(RoundedRectangle(cornerRadius: 8))
                                     }
                                     .clipShape(RoundedRectangle(cornerRadius: 8))
                                     .padding(.horizontal, 8)
@@ -42,12 +42,12 @@ struct NewPostView: View {
                                         viewModel.images.remove(at: index)
                                     } label: {
                                         Image("Close")
-                                            .renderingMode(.template)
-                                            .padding(4)
-                                            .background(.accent)
-                                            .foregroundStyle(.black)
-                                            .clipShape(Circle())
-                                            .padding()
+                                        .renderingMode(.template)
+                                        .padding(4)
+                                        .background(.accent)
+                                        .foregroundStyle(.black)
+                                        .clipShape(Circle())
+                                        .padding()
                                     }
                                 }
                             }
@@ -58,11 +58,11 @@ struct NewPostView: View {
                     
                     if (!viewModel.postText.isEmpty) {
                         Text("What's on your mind?")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.vertical, 8)
-                            .padding(.horizontal, 16)
-                            .font(.footnote)
-                            .foregroundStyle(.accent)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 16)
+                        .font(.footnote)
+                        .foregroundStyle(.accent)
                     }
                     
                     TextField(
