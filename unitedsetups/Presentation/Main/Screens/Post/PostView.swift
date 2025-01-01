@@ -20,14 +20,14 @@ struct PostView: View {
                 LazyVStack {
                     if (postViewModel.isLoading) {
                         SkeletonLoadingPost()
-                            .blinking(duration: 0.75)
-                            .onAppear {
-                                Task {
-                                    do {
-                                        try await postViewModel.fetchPostById(postId: postId)
-                                    }
+                        .blinking(duration: 0.75)
+                        .onAppear {
+                            Task {
+                                do {
+                                    try await postViewModel.fetchPostById(postId: postId)
                                 }
                             }
+                        }
                     }
                     if (postViewModel.post != nil) {
                         Group {
@@ -56,13 +56,19 @@ struct PostView: View {
                                     LazyVStack {
                                         ForEach(Array(post.postThreads.enumerated()), id: \.element) {
                                             index, postThread in
-                                            PostThreadItem(postThread: postThread, isChild: false, likePostThread: {id, liked in
-                                                try await postViewModel.likePostThread(postThreadId: id, liked: liked)
-                                            }, selectPostThread: {selected in postViewModel.selectPostThreadParent(selected: selected)
-                                            })
+                                            PostThreadItem(
+                                                postThread: postThread,
+                                                isChild: false,
+                                                likePostThread: { id, liked in
+                                                    try await postViewModel.likePostThread(postThreadId: id, liked: liked)
+                                                },
+                                                selectPostThread: { selected in
+                                                    postViewModel.selectPostThreadParent(selected: selected)
+                                                }
+                                            )
                                             if index != (post.postThreads.count - 1) {
                                                 Divider()
-                                                    .background(Color.gray)
+                                                .background(Color.gray)
                                             }
                                         }
                                     }
@@ -86,9 +92,9 @@ struct PostView: View {
                     HStack(alignment: .center) {
                         HStack {
                             Image("Comment")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 24, height: 24)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 24, height: 24)
                             VStack(alignment: .leading) {
                                 Text("Reply to:")
                                 Text("\(postViewModel.parentPostThread!.postedBy.username): \(postViewModel.parentPostThread!.text)")
@@ -99,9 +105,9 @@ struct PostView: View {
                             postViewModel.parentPostThread = nil
                         } label: {
                             Image("Close")
-                                .renderingMode(.template)
-                                .foregroundStyle(.white)
-                                .contentShape(Circle())
+                            .renderingMode(.template)
+                            .foregroundStyle(.white)
+                            .contentShape(Circle())
                         }
                     }
                     .padding()
@@ -113,11 +119,11 @@ struct PostView: View {
                 
                 if (!postViewModel.postThreadText.isEmpty) {
                     Text("What's on your mind?")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.vertical, 8)
-                        .padding(.horizontal, 16)
-                        .font(.footnote)
-                        .foregroundColor(.accent)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 16)
+                    .font(.footnote)
+                    .foregroundColor(.accent)
                 }
                 
                 TextField(

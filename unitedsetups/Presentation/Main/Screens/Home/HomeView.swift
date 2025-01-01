@@ -91,13 +91,13 @@ struct HomeView: View {
                     .environmentObject(newPostViewModel)
             ) {
                 Image("EditNote")
-                    .renderingMode(.template)
-                    .padding()
-                    .background(.accent)
-                    .foregroundStyle(Color("Background"))
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
-                    .shadow(radius: 16)
-                    .padding()
+                .renderingMode(.template)
+                .padding()
+                .background(.accent)
+                .foregroundStyle(Color("Background"))
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+                .shadow(radius: 16)
+                .padding()
             }
         }
         .frame(maxWidth: .infinity)

@@ -23,25 +23,25 @@ struct PostImageView: View {
             AsyncImage(url: URL(string: "\(Constants.baseUrl)/\(selectedPostMedia.path)")) {
                 result in
                 result.image?
-                    .resizable()
-                    .frame(width: UIScreen.main.bounds.height, height: UIScreen.main.bounds.height)
-                    .scaledToFill()
-                    .brightness(-0.5)
-                    .ignoresSafeArea(.all)
-                    .blur(radius: 20)
-                    .opacity(changeOpacity)
-                    .animation(.easeInOut, value: changeOpacity)
-                    .clipShape(Rectangle())
+                .resizable()
+                .frame(width: UIScreen.main.bounds.height, height: UIScreen.main.bounds.height)
+                .scaledToFill()
+                .brightness(-0.5)
+                .ignoresSafeArea(.all)
+                .blur(radius: 20)
+                .opacity(changeOpacity)
+                .animation(.easeInOut, value: changeOpacity)
+                .clipShape(Rectangle())
             }
             TabView(selection: $selectedPostMedia) {
                 ForEach(postMediaUrls, id: \.id) { postMediaUrl in
                         AsyncImage(url: URL(string: "\(Constants.baseUrl)/\(postMediaUrl.path)")) {
                             result in
                             result.image?
-                                .resizable()
-                                .scaledToFit()
-                                .frame(maxWidth: UIScreen.main.bounds.width)
-                                .zoomable()
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: UIScreen.main.bounds.width)
+                            .zoomable()
                         }
                         .tag(postMediaUrl)
                 }
