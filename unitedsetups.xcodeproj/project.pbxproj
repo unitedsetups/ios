@@ -16,9 +16,22 @@
 		E61C9A2A2CB28A4400E27ADB /* unitedsetups.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = unitedsetups.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		E61458B82D259B4600F1AA64 /* Exceptions for "unitedsetups" folder in "unitedsetups" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = E61C9A292CB28A4400E27ADB /* unitedsetups */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		E61C9A2C2CB28A4400E27ADB /* unitedsetups */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				E61458B82D259B4600F1AA64 /* Exceptions for "unitedsetups" folder in "unitedsetups" target */,
+			);
 			path = unitedsetups;
 			sourceTree = "<group>";
 		};
@@ -273,6 +286,7 @@
 				DEVELOPMENT_TEAM = 832L6NHFN9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = unitedsetups/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "United Setups";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -311,6 +325,7 @@
 				DEVELOPMENT_TEAM = 832L6NHFN9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = unitedsetups/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "United Setups";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
