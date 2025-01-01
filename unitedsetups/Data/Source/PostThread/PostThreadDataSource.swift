@@ -62,7 +62,7 @@ extension PostThreadDataSource: PostThreadDataSourceProtocol {
     }
     
     private func revokeAccessToken() {
-        _ = tokenManager.saveAccessToken(access_token: "")
+        tokenManager.revokeAccessToken()
     }
     
     private func getAccessToken() -> String {

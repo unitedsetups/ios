@@ -44,11 +44,12 @@ struct PostFooter: View {
                             
                             Text(post.upvotes.description)
                         }
+                        .contentShape(Circle())
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 4)
                     }
-                    .contentShape(Rectangle())
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 4)
-
+                    .buttonStyle(.plain)
+                    
                     Divider()
                     
                     Button {
@@ -63,16 +64,20 @@ struct PostFooter: View {
                                 .scaledToFit()
                                 .frame(width: 24, height: 24)
                                 .foregroundStyle(.accent)
+                                .contentShape(Circle())
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 4)
                         } else {
                             Image("ThumbsDown")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 24, height: 24)
+                                .contentShape(Circle())
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 4)
                         }
                     }
-                    .contentShape(Rectangle())
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 4)
+                    .buttonStyle(.plain)
                 }
             }
             .padding(8)
@@ -89,8 +94,8 @@ struct PostFooter: View {
                     .frame(width: 24, height: 24)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
+                    .contentShape(Circle())
             }
-            .contentShape(Rectangle())
             .padding(8)
             .background(.white.opacity(0.05))
             .cornerRadius(16)
@@ -104,8 +109,8 @@ struct PostFooter: View {
                     .frame(width: 24, height: 24)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
+                    .contentShape(Circle())
             }
-            .contentShape(Rectangle())
             .padding(8)
             .background(.white.opacity(0.05))
             .cornerRadius(16)

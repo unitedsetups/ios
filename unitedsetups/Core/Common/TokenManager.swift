@@ -30,6 +30,14 @@ struct TokenManager {
         }
     }
     
+    func revokeAccessToken() {
+        let preferences = UserDefaults.standard
+        guard let access_token = preferences.string(forKey: "access_token") else { return }
+        preferences.removeObject(forKey: "access_token")
+        guard let user_id = preferences.string(forKey: "user_id") else { return }
+        preferences.removeObject(forKey: "user_id")
+    }
+    
     func getUserId() -> String {
         let preferences = UserDefaults.standard
         if preferences.string(forKey: "user_id") != nil {
