@@ -118,6 +118,7 @@ import PhotosUI
                         postMediaUrls.append(PostMediaUrlRequest(path: result.paths[index], thumbnailPath: result.thumbnails[index]))
                     }
                     let postThreadResponse = try await createPostThreadUseCase.execute(request: CreatePostThreadRequest(postId: post.id.uuidString, parentPostThreadId: self.parentPostThread?.id.uuidString, text: postThreadText, postMediaUrls: postMediaUrls))
+                    self.isLoading = false
                     switch postThreadResponse {
                     case .success(let postThreadResult):
                         if parentPostThread != nil {
@@ -134,6 +135,7 @@ import PhotosUI
                 }
             } else {
                 let postThreadResponse = try await createPostThreadUseCase.execute(request: CreatePostThreadRequest(postId: post.id.uuidString, parentPostThreadId: self.parentPostThread?.id.uuidString, text: postThreadText, postMediaUrls: []))
+                self.isLoading = false
                 switch postThreadResponse {
                 case .success(let postThreadResult):
                     if parentPostThread != nil {
@@ -151,6 +153,7 @@ import PhotosUI
             self.images = []
             self.postThreadText = ""
             self.parentPostThread = nil
+            self.isLoading = false
             print(error)
         }
     }
