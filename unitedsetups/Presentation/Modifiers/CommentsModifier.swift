@@ -36,12 +36,11 @@ struct CommentsModifier: ViewModifier {
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
                     HStack {
-                        if !loading {
-                            NewPostBottomBarButtons(selectedPhotos: $viewModel.selectedPhotos) {
-                                Task {
-                                    loading = true
-                                    try await viewModel.createNewPostThread()
-                                }
+                        NewPostBottomBarButtons(selectedPhotos: $viewModel.selectedPhotos, loading: self.loading) {
+                            Task {
+                                self.loading = true
+                                try await viewModel.createNewPostThread()
+                                self.loading = false
                             }
                         }
                     }
@@ -53,12 +52,11 @@ struct CommentsModifier: ViewModifier {
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
                     HStack {
-                        if !loading {
-                            NewPostBottomBarButtons(selectedPhotos: $viewModel.selectedPhotos) {
-                                Task {
-                                    loading = true
-                                    try await viewModel.createNewPostThread()
-                                }
+                        NewPostBottomBarButtons(selectedPhotos: $viewModel.selectedPhotos, loading: self.loading) {
+                            Task {
+                                self.loading = true
+                                try await viewModel.createNewPostThread()
+                                self.loading = false
                             }
                         }
                     }

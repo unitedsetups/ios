@@ -37,12 +37,10 @@ struct NewPostModifier: ViewModifier {
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
                     HStack {
-                        if !loading {
-                            NewPostBottomBarButtons(selectedPhotos: $viewModel.selectedPhotos) {
-                                Task {
-                                    loading = true
-                                    try await viewModel.createNewPost()
-                                }
+                        NewPostBottomBarButtons(selectedPhotos: $viewModel.selectedPhotos, loading: self.loading) {
+                            Task {
+                                loading = true
+                                try await viewModel.createNewPost()
                             }
                         }
                     }
@@ -55,7 +53,7 @@ struct NewPostModifier: ViewModifier {
                 ToolbarItemGroup(placement: .bottomBar) {
                     HStack {
                         if !loading {
-                            NewPostBottomBarButtons(selectedPhotos: $viewModel.selectedPhotos) {
+                            NewPostBottomBarButtons(selectedPhotos: $viewModel.selectedPhotos, loading: self.loading) {
                                 Task {
                                     loading = true
                                     try await viewModel.createNewPost()
