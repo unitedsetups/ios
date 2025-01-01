@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var authViewModel : AuthenticationViewModel = .init(loginUseCase: Injection.shared.provideLoginUseCase(), registerUseCase: Injection.shared.provideRegisterUseCase())
+    @StateObject var postViewModel: PostViewModel = .init()
     
     var body: some View {
         if (!authViewModel.isLoggedIn) {
@@ -17,6 +18,7 @@ struct ContentView: View {
         } else {
             MainView()
                 .environmentObject(authViewModel)
+                .environmentObject(postViewModel)
         }
     }
 }

@@ -11,6 +11,7 @@ import SwiftUICore
 @MainActor class HomeViewModel: Observable, ObservableObject {
     let getAllPostsUseCase: GetAllPostsUseCase
     let likePostUseCase: LikePostUseCase
+    let deletePostUseCase: DeletePostUseCase
     let tokenManager: TokenManager = Injection.shared.provideTokenManager()
     
     private var page = 0
@@ -21,9 +22,10 @@ import SwiftUICore
     @Published var loggedInUserId: String? = nil
     @Published var postIdLoading: String? = nil
     
-    init(getAllPostsUseCase: GetAllPostsUseCase, likePostUseCase: LikePostUseCase) {
+    init(getAllPostsUseCase: GetAllPostsUseCase, likePostUseCase: LikePostUseCase, deletePostUseCase: DeletePostUseCase) {
         self.getAllPostsUseCase = getAllPostsUseCase
         self.likePostUseCase = likePostUseCase
+        self.deletePostUseCase = deletePostUseCase
         self.loggedInUserId = tokenManager.getUserId()
     }
     
@@ -55,6 +57,21 @@ import SwiftUICore
             self.posts.insert(post, at: index)
         case .failure(let failure):
             self.postIdLoading = nil
+            self.errorMessage = failure.localizedDescription
+        }
+    }
+    
+    func deletePost(id: String) async throws {
+        let result = try await deletePostUseCase.execute(id: id)
+        switch result {
+        case .success(let deleted):
+            if (deleted) {
+                guard let index = self.posts.firstIndex(where: { pt in pt.id == UUID(uuidString: id) }) else {
+                    return
+                }
+                self.posts.remove(at: index)
+            }
+        case .failure(let failure):
             self.errorMessage = failure.localizedDescription
         }
     }

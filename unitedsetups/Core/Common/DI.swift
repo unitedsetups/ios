@@ -61,4 +61,8 @@ struct Injection {
     func provideLikePostThreadUseCase() -> LikePostThreadUseCase {
         return LikePostThreadImpl(repo: PostThreadRepository.sharedInstance(PostThreadDataSource.shared))
     }
+    
+    func provideDeletePostUseCase() -> DeletePostUseCase {
+        return DeletePostImpl(repo: PostRepository.sharedInstance(PostDataSource.shared))
+    }
 }

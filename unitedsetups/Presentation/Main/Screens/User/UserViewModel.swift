@@ -12,6 +12,7 @@ import SwiftUI
     let getMyProfileUseCase: GetMyProfileUseCase
     let getAllPostsUseCase: GetAllPostsUseCase
     let likePostUseCase: LikePostUseCase
+    let deletePostUseCase: DeletePostUseCase
     let tokenManager: TokenManager = Injection.shared.provideTokenManager()
     
     @State private var page: Int = 0
@@ -26,13 +27,15 @@ import SwiftUI
         getUserByIdUseCase: GetUserByIdUseCase,
         getMyProfileUseCase: GetMyProfileUseCase,
         getAllPostsUseCase: GetAllPostsUseCase,
-        likePostUseCase: LikePostUseCase
+        likePostUseCase: LikePostUseCase,
+        deletePostUseCase: DeletePostUseCase
     ) {
         self.getAllPostsUseCase = getAllPostsUseCase
         self.getMyProfileUseCase = getMyProfileUseCase
         self.getUserByIdUseCase = getUserByIdUseCase
         self.likePostUseCase = likePostUseCase
         self.loggedInUserId = tokenManager.getUserId()
+        self.deletePostUseCase = deletePostUseCase
     }
     
     func getUserById(userId: String) async throws -> User {
@@ -91,6 +94,21 @@ import SwiftUI
             self.postIdLoading = nil
         case .failure(let failure):
             self.postIdLoading = nil
+            self.errorMessage = failure.localizedDescription
+        }
+    }
+    
+    func deletePost(id: String) async throws {
+        let result = try await deletePostUseCase.execute(id: id)
+        switch result {
+        case .success(let deleted):
+            if (deleted) {
+                guard let index = self.posts.firstIndex(where: { pt in pt.id == UUID(uuidString: id) }) else {
+                    return
+                }
+                self.posts.remove(at: index)
+            }
+        case .failure(let failure):
             self.errorMessage = failure.localizedDescription
         }
     }
